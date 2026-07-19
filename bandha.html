@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BANDHA — The Thread That Binds</title>
+<style>
+:root{
+  --maroon:#4E1420;
+  --ruby:#7C1F2C;
+  --wine:#3A0F1C;
+  --gold:#C9A227;
+  --gold-light:#F0D27E;
+  --gold-dark:#8B5E2E;
+  --ivory:#F1E6CE;
+  --ivory-dim:#E7D8B7;
+  --emerald:#153A2C;
+  --plum:#33132C;
+  --ink:#1B0E0C;
+  --font-display: Georgia, 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  --font-body: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--ink);
+  color:var(--ivory);
+  font-family:var(--font-body);
+  overflow-x:hidden;
+  cursor:default;
+}
+::selection{background:var(--gold);color:var(--ink);}
+
+/* ============ TEXTURE MIXINS (as classes) ============ */
+.tex-ikat{
+  background-color:var(--maroon);
+  background-image:
+    repeating-linear-gradient(45deg, rgba(201,162,39,0.07) 0 2px, transparent 2px 26px),
+    repeating-linear-gradient(-45deg, rgba(201,162,39,0.06) 0 2px, transparent 2px 26px),
+    radial-gradient(circle at 20% 30%, rgba(240,210,126,0.06), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(240,210,126,0.05), transparent 45%);
+}
+.tex-emerald{
+  background-color:var(--emerald);
+  background-image:
+    repeating-linear-gradient(90deg, rgba(201,162,39,0.05) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(0deg, rgba(201,162,39,0.04) 0 1px, transparent 1px 40px),
+    radial-gradient(circle at 50% 0%, rgba(201,162,39,0.08), transparent 55%);
+}
+.tex-plum{
+  background-color:var(--plum);
+  background-image:
+    repeating-linear-gradient(60deg, rgba(240,210,126,0.045) 0 2px, transparent 2px 30px),
+    radial-gradient(circle at 70% 20%, rgba(124,31,44,0.35), transparent 50%);
+}
+.tex-ivory{
+  background-color:var(--ivory);
+  background-image:
+    repeating-linear-gradient(45deg, rgba(78,20,32,0.035) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(-45deg, rgba(78,20,32,0.03) 0 1px, transparent 1px 22px);
+}
+
+/* ============ EMBROIDERED TYPE ============ */
+.stitched{
+  font-family:var(--font-display);
+  background:linear-gradient(180deg,#FBE7A6 0%, #E9C765 30%, #C9A227 55%, #8B5E2E 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  filter:
+    drop-shadow(0 1px 0 rgba(255,255,255,.35))
+    drop-shadow(0 3px 2px rgba(0,0,0,.55))
+    drop-shadow(0 6px 10px rgba(0,0,0,.35));
+  position:relative;
+  letter-spacing:.04em;
+}
+.thread-rule{
+  display:block;
+  width:120px;
+  height:10px;
+  margin:0 auto;
+  background-image: repeating-linear-gradient(90deg, var(--gold) 0 6px, transparent 6px 12px);
+  opacity:.85;
+  border-radius:2px;
+}
+.thread-rule.left{margin:0;}
+.eyebrow{
+  font-family:var(--font-body);
+  font-size:.72rem;
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  color:var(--gold-light);
+  opacity:.85;
+}
+
+/* ============ LOADER ============ */
+#loader{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;
+  transition:opacity 1s ease, visibility 1s ease;
+}
+#loader svg{width:min(80vw,520px);height:auto;}
+#loader .loom-word{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,7vw,4rem);
+  letter-spacing:.12em;
+}
+#loader .loom-caption{
+  margin-top:18px;font-size:.68rem;letter-spacing:.3em;color:var(--gold-dark);text-transform:uppercase;
+}
+#loader.hide{opacity:0;visibility:hidden;pointer-events:none;}
+
+/* ============ NAV ============ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 5vw;
+  mix-blend-mode:normal;
+  transition:background .4s ease, padding .4s ease;
+}
+nav.scrolled{
+  background:rgba(27,14,12,0.86);
+  backdrop-filter:blur(6px);
+  padding:14px 5vw;
+  border-bottom:1px solid rgba(201,162,39,.2);
+}
+.logo-mark{
+  font-family:var(--font-display);
+  font-size:clamp(1.05rem,2.4vw,1.5rem);letter-spacing:.25em;
+  color:var(--gold-light);
+}
+.nav-links{display:flex;gap:36px;list-style:none;}
+.nav-links a{
+  color:var(--ivory-dim);text-decoration:none;font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;
+  position:relative;padding-bottom:4px;
+}
+.nav-links a::after{
+  content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--gold);
+  transition:width .35s ease;
+}
+.nav-links a:hover::after{width:100%;}
+.nav-cta{
+  border:1px solid var(--gold);color:var(--gold-light);
+  padding:9px 20px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+  background:transparent;text-decoration:none;
+  position:relative;overflow:hidden;
+  white-space:nowrap;
+}
+.nav-cta span{position:relative;z-index:2;}
+.nav-cta::before{
+  content:'';position:absolute;inset:0;background:var(--gold);transform:translateX(-101%);transition:transform .4s ease;z-index:1;
+}
+.nav-cta:hover::before{transform:translateX(0);}
+.nav-cta:hover{color:var(--ink);}
+
+/* Hamburger — hidden on desktop, shown at the tablet breakpoint */
+.nav-toggle{
+  display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;z-index:601;
+}
+.nav-toggle span{width:24px;height:1.5px;background:var(--gold-light);transition:transform .35s ease, opacity .35s ease;}
+.nav-toggle.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.nav-toggle.open span:nth-child(2){opacity:0;}
+.nav-toggle.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+
+.mobile-nav{
+  position:fixed;inset:0;z-index:600;background:var(--ink);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;
+  transform:translateY(-100%);transition:transform .55s cubic-bezier(.2,.8,.2,1);
+}
+.mobile-nav.open{transform:translateY(0);}
+.mobile-nav a{
+  color:var(--ivory);text-decoration:none;font-family:var(--font-display);font-size:1.6rem;letter-spacing:.06em;
+}
+.mobile-nav .nav-cta{margin-top:10px;}
+
+/* ============ HERO ============ */
+.hero{
+  position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;perspective:1000px;
+}
+.hero-inner{
+  position:relative;z-index:3;text-align:center;padding:0 20px;
+  transform-style:preserve-3d;will-change:transform;
+}
+.hero .eyebrow{display:block;margin-bottom:22px;}
+.hero h1{
+  font-size:clamp(4rem,14vw,10.5rem);
+  line-height:.9;
+}
+.hero .sub{
+  font-family:var(--font-display);font-style:italic;
+  font-size:clamp(1rem,2vw,1.4rem);
+  color:var(--ivory-dim);
+  margin:26px auto 40px;max-width:560px;
+  letter-spacing:.02em;
+}
+.hero-cta{
+  display:inline-flex;align-items:center;gap:14px;
+  border:1px solid var(--gold);
+  padding:16px 34px;
+  color:var(--gold-light);text-decoration:none;
+  font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;
+  position:relative;overflow:hidden;
+}
+.hero-cta span{position:relative;z-index:2;}
+.hero-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--gold-dark),var(--gold));transform:translateX(-101%);transition:transform .5s ease;z-index:1;}
+.hero-cta:hover::before{transform:translateX(0);}
+.hero-cta:hover{color:var(--ink);}
+.silhouette{position:absolute;bottom:0;right:6%;height:88%;opacity:.9;z-index:2;pointer-events:none;}
+.silhouette svg{height:100%;width:auto;}
+.hero-vignette{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse at center, transparent 40%, rgba(27,14,12,.75) 100%);}
+.scroll-cue{
+  position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:4;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-size:.62rem;letter-spacing:.3em;color:var(--gold-dark);text-transform:uppercase;
+}
+.scroll-cue .line{width:1px;height:40px;background:linear-gradient(var(--gold),transparent);animation:pulse-line 2.2s ease infinite;}
+@keyframes pulse-line{0%,100%{opacity:.3;}50%{opacity:1;}}
+
+/* ============ MARQUEE ============ */
+.marquee-wrap{
+  background:var(--wine);
+  border-top:1px solid rgba(201,162,39,.25);
+  border-bottom:1px solid rgba(201,162,39,.25);
+  overflow:hidden;padding:16px 0;position:relative;z-index:5;
+}
+.marquee{display:flex;white-space:nowrap;width:max-content;animation:scroll-left 34s linear infinite;}
+.marquee span{
+  font-family:var(--font-display);font-style:italic;
+  font-size:1.15rem;color:var(--gold-light);opacity:.8;
+  padding:0 28px;position:relative;
+}
+.marquee span::after{content:'✦';position:absolute;right:-4px;color:var(--gold-dark);opacity:.7;font-size:.8rem;}
+@keyframes scroll-left{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ============ SECTION GENERAL ============ */
+section{position:relative;padding:150px 6vw;}
+.section-head{max-width:640px;margin-bottom:70px;}
+.section-head h2{font-size:clamp(2.4rem,5vw,4.2rem);line-height:1.05;margin-top:16px;}
+.section-head p{color:var(--ivory-dim);margin-top:20px;line-height:1.8;font-weight:300;max-width:520px;}
+
+/* ============ CRAFT / LOOM STORY ============ */
+.craft{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.craft-copy p{color:var(--ivory-dim);line-height:1.95;font-weight:300;margin-bottom:20px;font-size:1.02rem;}
+.craft-copy p:first-of-type::first-letter{
+  font-family:var(--font-display);font-size:3.6rem;float:left;line-height:.8;
+  padding:6px 10px 0 0;color:var(--gold-light);
+}
+.loom-figure{position:relative;aspect-ratio:1/1;}
+.loom-figure svg{width:100%;height:100%;}
+
+/* ============ REGION EXPLORER ============ */
+.region-pills{
+  display:flex;flex-wrap:wrap;gap:10px;margin-bottom:46px;
+}
+.region-pill{
+  border:1px solid rgba(201,162,39,.35);background:transparent;color:var(--ivory-dim);
+  padding:9px 18px;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;
+  border-radius:30px;cursor:pointer;font-family:var(--font-body);font-weight:400;
+  transition:background .3s ease,color .3s ease,border-color .3s ease,transform .3s ease;
+  white-space:nowrap;
+}
+.region-pill .ic{margin-right:6px;}
+.region-pill:hover{border-color:var(--gold);color:var(--ivory);transform:translateY(-2px);}
+.region-pill.active{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:600;}
+.region-panel{
+  position:relative;border-radius:3px;overflow:hidden;min-height:460px;
+  display:grid;grid-template-columns:1fr;
+  box-shadow:0 30px 70px rgba(0,0,0,.45);
+  transform-style:preserve-3d;will-change:transform;perspective:1000px;
+}
+@media(max-width:700px){.region-panel{min-height:auto;}}
+.region-panel-bg{position:absolute;inset:0;z-index:1;transition:opacity .2s ease;transform:translateZ(-20px) scale(1.05);}
+.region-panel-veil{
+  position:absolute;inset:0;z-index:2;
+  background:linear-gradient(100deg, rgba(27,14,12,.92) 0%, rgba(27,14,12,.55) 45%, rgba(27,14,12,.15) 100%);
+}
+.region-panel-content{position:relative;z-index:3;padding:64px 5vw;max-width:640px;transform:translateZ(25px);}
+@media(max-width:700px){
+  .region-panel-content{padding:44px 6vw;max-width:100%;}
+  .region-panel-veil{background:linear-gradient(180deg, rgba(27,14,12,.55) 0%, rgba(27,14,12,.94) 65%);}
+}
+.region-panel-content .eyebrow{display:block;margin-bottom:14px;}
+.region-panel-content h3{font-family:var(--font-display);font-size:clamp(2rem,4.4vw,3.6rem);color:var(--ivory);margin-bottom:6px;}
+.region-signature{
+  font-family:var(--font-display);font-style:italic;color:var(--gold-light);font-size:clamp(.95rem,2vw,1.15rem);margin-bottom:22px;
+}
+.region-count{font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ivory-dim);margin-bottom:26px;}
+.region-saree-list{display:flex;flex-wrap:wrap;gap:10px;}
+.region-chip{
+  border:1px solid rgba(240,210,126,.4);color:var(--ivory);
+  padding:8px 16px;font-size:.78rem;border-radius:2px;background:rgba(27,14,12,.35);
+  letter-spacing:.02em;
+}
+
+/* ============ REFINE / TAXONOMY CHIPS ============ */
+.refine-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:50px;}
+@media(max-width:900px){.refine-grid{grid-template-columns:1fr;}}
+.refine-col h4{
+  font-family:var(--font-display);font-size:1.3rem;color:var(--gold-light);margin-bottom:20px;
+  padding-bottom:12px;border-bottom:1px solid rgba(201,162,39,.25);
+}
+.chip-cloud{display:flex;flex-wrap:wrap;gap:8px;}
+.chip-cloud .chip{
+  font-size:.76rem;padding:7px 14px;border:1px solid rgba(201,162,39,.3);color:var(--ivory-dim);
+  border-radius:2px;cursor:default;transition:border-color .3s ease,color .3s ease,background .3s ease;
+}
+.chip-cloud .chip:hover{border-color:var(--gold);color:var(--ivory);background:rgba(201,162,39,.08);}
+
+/* ============ SWATCH GRID (PRODUCT) ============ */
+.swatch-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:26px;
+  perspective:1400px;
+}
+@media(max-width:1200px){.swatch-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:820px){.swatch-grid{grid-template-columns:repeat(2,1fr);gap:18px;}}
+@media(max-width:480px){.swatch-grid{grid-template-columns:1fr;}}
+.swatch{
+  position:relative;height:420px;border-radius:3px;overflow:hidden;
+  cursor:pointer;
+  box-shadow:0 20px 40px rgba(0,0,0,.35);
+  transform-style:preserve-3d;
+  will-change:transform;
+  transition:box-shadow .5s ease;
+}
+@media(max-width:600px){.swatch{height:340px;}}
+.swatch:hover{box-shadow:0 34px 70px rgba(0,0,0,.55);}
+.swatch::before{ /* folded corner, lifted for a paper-fold 3D read */
+  content:'';position:absolute;top:0;right:0;width:0;height:0;
+  border-style:solid;border-width:0 46px 46px 0;
+  border-color:transparent rgba(0,0,0,.35) transparent transparent;
+  z-index:4;transition:border-width .4s ease;
+  filter:drop-shadow(-2px 2px 3px rgba(0,0,0,.4));
+}
+.swatch:hover::before{border-width:0 60px 60px 0;}
+.swatch-fold{
+  position:absolute;inset:0;z-index:1;
+  transform:translateZ(0);
+}
+.swatch-glow{
+  position:absolute;inset:0;z-index:2;
+  border:1px solid rgba(201,162,39,0);
+  transition:border-color .4s ease;
+  box-shadow:inset 0 0 0 rgba(0,0,0,0);
+}
+.swatch:hover .swatch-glow{border-color:rgba(201,162,39,.65);box-shadow:inset 0 0 50px rgba(201,162,39,.18), inset 0 0 90px rgba(0,0,0,.3);}
+.swatch-label{
+  transform:translateZ(30px);
+  position:absolute;left:0;right:0;bottom:0;z-index:3;padding:26px 24px 24px;
+  background:linear-gradient(0deg, rgba(0,0,0,.65), transparent);
+}
+.swatch-label .num{font-size:.68rem;letter-spacing:.25em;color:var(--gold-light);opacity:.75;}
+.swatch-label h3{font-family:var(--font-display);font-size:1.5rem;margin-top:6px;color:var(--ivory);}
+.swatch-label p{font-size:.78rem;color:var(--ivory-dim);margin-top:6px;max-width:220px;font-weight:300;line-height:1.5;
+  max-height:0;opacity:0;overflow:hidden;transition:max-height .4s ease, opacity .4s ease;}
+.swatch:hover .swatch-label p{max-height:80px;opacity:1;margin-top:10px;}
+
+/* ============ EDITORIAL STRIP ============ */
+.editorial{background-color:var(--ivory);color:var(--ink);}
+.editorial .section-head p{color:#5b4530;}
+.editorial-scroll{
+  display:flex;gap:24px;overflow-x:auto;padding-bottom:20px;scrollbar-width:thin;
+  perspective:1200px;scroll-snap-type:x proximity;
+}
+.editorial-card{
+  flex:0 0 320px;height:420px;position:relative;border-radius:3px;overflow:hidden;
+  transform-style:preserve-3d;will-change:transform;scroll-snap-align:start;
+  box-shadow:0 18px 34px rgba(0,0,0,.18);
+}
+@media(max-width:640px){.editorial-card{flex:0 0 78vw;height:340px;}}
+.editorial-card .cap{
+  position:absolute;left:20px;bottom:20px;color:var(--ivory);
+  font-family:var(--font-display);font-style:italic;font-size:1.1rem;
+  text-shadow:0 2px 8px rgba(0,0,0,.6);
+  transform:translateZ(20px);
+}
+
+/* ============ HERITAGE ============ */
+.heritage{
+  display:grid;grid-template-columns:1.1fr .9fr;gap:80px;align-items:center;
+}
+.heritage-copy p{color:var(--ivory-dim);line-height:1.95;font-weight:300;font-size:1.02rem;margin-bottom:18px;}
+.heritage-stats{display:flex;gap:50px;margin-top:40px;flex-wrap:wrap;}
+.heritage-stats .stat b{
+  display:block;font-family:var(--font-display);font-size:2.4rem;color:var(--gold-light);
+}
+.heritage-stats .stat span{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ivory-dim);}
+.heritage-frame{
+  position:relative;aspect-ratio:4/5;border:1px solid rgba(201,162,39,.35);padding:18px;
+  transform-style:preserve-3d;will-change:transform;box-shadow:0 24px 50px rgba(0,0,0,.35);
+  transition:box-shadow .5s ease;
+}
+.heritage-frame:hover{box-shadow:0 34px 70px rgba(0,0,0,.5);}
+.heritage-frame-inner{width:100%;height:100%;position:relative;overflow:hidden;}
+
+/* ============ NEWSLETTER ============ */
+.loom-cta{
+  text-align:center;padding:170px 6vw;position:relative;
+}
+.loom-cta h2{font-size:clamp(2.4rem,6vw,5rem);}
+.loom-cta p{color:var(--ivory-dim);max-width:480px;margin:22px auto 40px;font-weight:300;line-height:1.8;}
+.loom-form{display:flex;justify-content:center;gap:0;max-width:460px;margin:0 auto;}
+.loom-form input{
+  flex:1;background:transparent;border:none;border-bottom:1px solid rgba(201,162,39,.5);
+  padding:14px 8px;color:var(--ivory);font-size:.9rem;font-family:var(--font-body);
+}
+.loom-form input::placeholder{color:var(--ivory-dim);opacity:.6;}
+.loom-form input:focus{outline:none;border-bottom-color:var(--gold);}
+.loom-form button{
+  background:none;border:none;border-bottom:1px solid var(--gold);color:var(--gold-light);
+  padding:14px 18px;letter-spacing:.2em;font-size:.72rem;text-transform:uppercase;cursor:pointer;
+}
+.loom-form button:hover{color:var(--ink);background:var(--gold);}
+
+/* ============ FOOTER ============ */
+footer{position:relative;background:var(--wine);padding-top:0;}
+.temple-border{height:34px;width:100%;
+  background-image: repeating-linear-gradient(115deg, transparent 0 12px, rgba(201,162,39,.55) 12px 13px),
+                     repeating-linear-gradient(65deg, transparent 0 12px, rgba(201,162,39,.35) 12px 13px);
+  background-color:var(--maroon);
+}
+.footer-grid{
+  display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:50px;padding:80px 6vw 40px;
+}
+.footer-brand .logo-mark{display:block;margin-bottom:16px;}
+.footer-brand p{color:var(--ivory-dim);font-size:.88rem;line-height:1.8;font-weight:300;max-width:280px;}
+.footer-col h4{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-light);margin-bottom:18px;}
+.footer-col a{display:block;color:var(--ivory-dim);text-decoration:none;font-size:.85rem;margin-bottom:12px;font-weight:300;}
+.footer-col a:hover{color:var(--gold-light);}
+.footer-bottom{
+  border-top:1px solid rgba(201,162,39,.2);padding:26px 6vw;display:flex;justify-content:space-between;
+  font-size:.72rem;color:var(--ivory-dim);letter-spacing:.05em;flex-wrap:wrap;gap:10px;
+}
+
+/* ============ REVEAL UTIL ============ */
+.reveal{opacity:0;transform:translateY(40px);}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001s !important;transition-duration:.001s !important;}
+}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:1100px){
+  .craft, .heritage{gap:50px;}
+}
+@media(max-width:900px){
+  .nav-links{display:none;}
+  .nav-toggle{display:flex;}
+  .craft, .heritage{grid-template-columns:1fr;}
+  .silhouette{opacity:.3;right:0;height:70%;}
+  section{padding:100px 6vw;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .loom-figure, .heritage-frame{max-width:420px;margin:0 auto;}
+}
+@media(max-width:700px){
+  section{padding:76px 6vw;}
+  .section-head{margin-bottom:46px;}
+  .hero-inner{padding:0 12px;}
+  .hero .sub{font-size:1rem;}
+  .heritage-stats{gap:32px;}
+  .loom-cta{padding:110px 6vw;}
+}
+@media(max-width:600px){
+  .marquee span{font-size:.95rem;padding:0 18px;}
+  .region-pills{gap:8px;}
+  .region-pill{padding:8px 14px;font-size:.68rem;}
+  footer .temple-border{height:22px;}
+  .footer-grid{grid-template-columns:1fr;gap:36px;padding:60px 6vw 30px;}
+  .footer-bottom{flex-direction:column;text-align:center;}
+  .loom-form{flex-direction:column;gap:14px;}
+  .loom-form input, .loom-form button{border-bottom:1px solid rgba(201,162,39,.5);}
+  .heritage-stats{gap:24px;justify-content:space-between;}
+  .heritage-stats .stat b{font-size:1.9rem;}
+}
+@media(max-width:420px){
+  .logo-mark{letter-spacing:.15em;}
+  .hero-cta, .nav-cta{padding:13px 22px;font-size:.68rem;}
+  .thread-rule{width:90px;}
+  .swatch-label h3{font-size:1.25rem;}
+}
+@media(min-width:1700px){
+  section{padding:180px 7vw;}
+  .hero-inner{max-width:1100px;}
+}
+@media (hover:none) and (pointer:coarse){
+  .swatch, .editorial-card, .region-panel{transform:none !important;}
+  .swatch:hover{box-shadow:0 20px 40px rgba(0,0,0,.35);}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ LOADER ============ -->
+<div id="loader">
+  <svg viewBox="0 0 600 140" xmlns="http://www.w3.org/2000/svg">
+    <g id="warp"></g>
+    <text x="300" y="90" text-anchor="middle" class="loom-word" fill="none" stroke="#C9A227" stroke-width="1.2" id="loomText">BANDHA</text>
+  </svg>
+  <div class="loom-caption">Tying the first thread</div>
+</div>
+
+<!-- ============ NAV ============ -->
+<nav id="nav">
+  <div class="logo-mark">BANDHA</div>
+  <ul class="nav-links">
+    <li><a href="#craft">The Bandha</a></li>
+    <li><a href="#regions">Regions</a></li>
+    <li><a href="#weaves">Weaves</a></li>
+    <li><a href="#heritage">Heritage</a></li>
+    <li><a href="#loom">Atelier</a></li>
+  </ul>
+  <a href="#weaves" class="nav-cta"><span>Enter the Loom</span></a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="#craft">The Bandha</a>
+  <a href="#regions">Regions</a>
+  <a href="#weaves">Weaves</a>
+  <a href="#heritage">Heritage</a>
+  <a href="#loom">Atelier</a>
+  <a href="#weaves" class="nav-cta"><span>Enter the Loom</span></a>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero tex-ikat">
+  <div class="hero-vignette"></div>
+  <div class="silhouette">
+    <svg viewBox="0 0 260 620" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="silGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#8B5E2E" stop-opacity="0.55"/>
+          <stop offset="100%" stop-color="#1B0E0C" stop-opacity="0.85"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#silGrad)" d="M132 8c22 0 38 18 38 40 0 14-6 24-14 32 26 10 40 30 46 58 10 46-6 70 4 96 14 36 40 46 46 92 8 60-18 84-18 130 0 40 20 60 20 100 0 30-16 46-40 54-10 4-8 14 2 16 30 6 30 40-2 44H60c-30-4-30-38 0-44 10-2 12-12 2-16-24-8-40-24-40-54 0-40 20-60 20-100 0-46-26-70-18-130 6-46 32-56 46-92 10-26-6-50 4-96 6-28 20-48 46-58-8-8-14-18-14-32 0-22 16-40 38-40z"/>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <span class="eyebrow">Sambalpuri Ikat · House of Bandha</span>
+    <h1 class="stitched">BANDHA</h1>
+    <p class="sub">Every thread is tied before it is dyed, dyed before it is woven, and woven before it is worn — the bond that gives Bandha its name.</p>
+    <a href="#weaves" class="hero-cta"><span>Discover the Weaves</span></a>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+</header>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span>Sambalpuri</span><span>Ikat</span><span>Handloom</span><span>Bandha</span><span>Kanjivaram</span><span>Banarasi</span><span>Paithani</span><span>Patola</span>
+    <span>Sambalpuri</span><span>Ikat</span><span>Handloom</span><span>Bandha</span><span>Kanjivaram</span><span>Banarasi</span><span>Paithani</span><span>Patola</span>
+  </div>
+</div>
+
+<!-- ============ CRAFT / THE BANDHA STORY ============ -->
+<section id="craft" class="tex-emerald">
+  <div class="craft">
+    <div class="craft-copy reveal">
+      <span class="eyebrow">The Art of the Tie</span>
+      <h2 class="stitched" style="font-size:clamp(2.2rem,4vw,3.4rem);">Bound before it is born</h2>
+      <span class="thread-rule left" style="margin:18px 0 26px;"></span>
+      <p>In the villages of Bargarh and Sonepur, thread is bound in tight resist-knots long before it touches a single drop of dye. This is <em>bandha</em> — the tie — and it is the reason no two Sambalpuri sarees are ever quite the same.</p>
+      <p>The weaver ties, dyes, unties, re-ties, and dyes again — sometimes seven or eight times — calculating, entirely by memory, exactly where each colour must fall once the cloth is finally woven. The pattern lives in the thread before it ever reaches the loom.</p>
+      <p>We take our name from this single, patient act of binding — a philosophy of craft we carry into every saree we weave.</p>
+    </div>
+    <div class="loom-figure reveal">
+      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" id="loomSVG">
+        <rect x="0" y="0" width="400" height="400" fill="none"/>
+        <g id="weftLines" stroke="#C9A227" stroke-opacity="0.55" stroke-width="1"></g>
+        <g id="warpLines" stroke="#F0D27E" stroke-opacity="0.7" stroke-width="1"></g>
+        <g id="diamonds" fill="none" stroke="#7C1F2C" stroke-width="2"></g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REGION EXPLORER ============ -->
+<section id="regions" class="tex-plum">
+  <div class="section-head reveal">
+    <span class="eyebrow">India, Loom by Loom</span>
+    <h2 class="stitched">Choose a State, See Its Silk</h2>
+    <p>Every region ties, dyes, and weaves in its own language. Select a state and the house changes its cloth to match — the background itself becomes that region's signature weave.</p>
+  </div>
+  <div class="region-pills" id="regionPills"></div>
+  <div class="region-panel reveal" id="regionPanel">
+    <div class="region-panel-bg" id="regionPanelBg"></div>
+    <div class="region-panel-veil"></div>
+    <div class="region-panel-content">
+      <span class="eyebrow" id="regionEyebrow">Region</span>
+      <h3 id="regionName">Odisha</h3>
+      <div class="region-signature" id="regionSignature">Signature: Sambalpuri Ikat</div>
+      <div class="region-count" id="regionCount">12 weaves from this state</div>
+      <div class="region-saree-list" id="regionSareeList"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRODUCT SHOWCASE ============ -->
+<section id="weaves" class="tex-ikat">
+  <div class="section-head reveal">
+    <span class="eyebrow">The Collection</span>
+    <h2 class="stitched">Eight Icons of the House</h2>
+    <p>Across two hundred weaves in our catalogue, these eight define us — the pieces we return to, region after region, season after season.</p>
+  </div>
+  <div class="swatch-grid" id="swatchGrid"></div>
+</section>
+
+<!-- ============ REFINE / TAXONOMY ============ -->
+<section id="refine" class="tex-ivory editorial">
+  <div class="section-head reveal">
+    <span class="eyebrow" style="color:#8B5E2E;">Refine</span>
+    <h2 class="stitched">By Fabric, Weave & Occasion</h2>
+    <p>Beyond geography, the same saree can be found by what it's made of, how it's made, or where you'll wear it.</p>
+  </div>
+  <div class="refine-grid">
+    <div class="refine-col reveal">
+      <h4>By Fabric</h4>
+      <div class="chip-cloud" id="fabricChips"></div>
+    </div>
+    <div class="refine-col reveal">
+      <h4>By Weaving Style</h4>
+      <div class="chip-cloud" id="weaveChips"></div>
+    </div>
+    <div class="refine-col reveal">
+      <h4>By Occasion</h4>
+      <div class="chip-cloud" id="occasionChips"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EDITORIAL STRIP ============ -->
+<section class="editorial">
+  <div class="section-head reveal">
+    <span class="eyebrow" style="color:#8B5E2E;">Lookbook</span>
+    <h2 class="stitched">Drape, Season Six</h2>
+    <p>A quiet study of pleats, palloos, and the way light moves across zari.</p>
+  </div>
+  <div class="editorial-scroll" id="editorialScroll"></div>
+</section>
+
+<!-- ============ HERITAGE ============ -->
+<section id="heritage" class="tex-plum">
+  <div class="heritage">
+    <div class="heritage-copy reveal">
+      <span class="eyebrow">The Weavers</span>
+      <h2 class="stitched" style="font-size:clamp(2.2rem,4vw,3.4rem);">Four generations at one loom</h2>
+      <span class="thread-rule left" style="margin:18px 0 26px;"></span>
+      <p>Behind every Bandha saree is a family, not a factory. Our weaving partners in Odisha, Varanasi, Paithan, and Kanchipuram have passed their pit-looms from grandparent to grandchild, each generation adding its own small correction to a pattern centuries old.</p>
+      <p>We pay by the saree, not the hour — because a Kanjivaram border deserves the eleven days it asks for, and a Jamdani motif cannot be rushed toward a deadline it does not recognise.</p>
+      <div class="heritage-stats">
+        <div class="stat"><b>214</b><span>Weaver Families</span></div>
+        <div class="stat"><b>11</b><span>Days per Border</span></div>
+        <div class="stat"><b>4</b><span>Generations</span></div>
+      </div>
+    </div>
+    <div class="heritage-frame reveal">
+      <div class="heritage-frame-inner tex-ikat" id="heritageArt"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NEWSLETTER / LOOM ============ -->
+<div id="loom" class="loom-cta tex-emerald">
+  <span class="eyebrow">Join the Loom</span>
+  <h2 class="stitched">Be first to the new weave</h2>
+  <p>A quiet note, a few times a season, when a new bandha pattern comes off the loom.</p>
+  <form class="loom-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Woven In ✓';">
+    <input type="email" placeholder="Your email" required>
+    <button type="submit">Subscribe</button>
+  </form>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="temple-border"></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="logo-mark">BANDHA</span>
+      <p>A house of handwoven sarees, built on the Odia art of bandha — the tie that comes before the dye, the dye that comes before the weave.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Weaves</h4>
+      <a href="#weaves">Sambalpuri Bandha</a>
+      <a href="#weaves">Kanjivaram</a>
+      <a href="#weaves">Banarasi</a>
+      <a href="#weaves">Paithani</a>
+    </div>
+    <div class="footer-col">
+      <h4>House</h4>
+      <a href="#craft">The Bandha</a>
+      <a href="#heritage">Our Weavers</a>
+      <a href="#loom">Atelier Notes</a>
+    </div>
+    <div class="footer-col">
+      <h4>Visit</h4>
+      <a href="#">Bhubaneswar Atelier</a>
+      <a href="#">Book an Appointment</a>
+      <a href="#">Care & Storage</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Bandha. Every saree, tied by hand.</span>
+    <span>Woven in Odisha</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ---------- Loader: draw warp lines + stitch the wordmark ---------- */
+(function(){
+  const warp = document.getElementById('warp');
+  const n = 26;
+  for(let i=0;i<n;i++){
+    const x = (600/n)*i + 8;
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',x); line.setAttribute('y1',0);
+    line.setAttribute('x2',x); line.setAttribute('y2',140);
+    line.setAttribute('stroke', i%2===0 ? '#C9A227' : '#7C1F2C');
+    line.setAttribute('stroke-width','1');
+    line.setAttribute('stroke-opacity','0.35');
+    line.style.transformOrigin='center';
+    warp.appendChild(line);
+  }
+  gsap.from(warp.children, {scaleY:0, duration:0.8, stagger:0.02, ease:'power2.out'});
+
+  const text = document.getElementById('loomText');
+  const len = text.getComputedTextLength ? 900 : 900;
+  text.style.strokeDasharray = len;
+  text.style.strokeDashoffset = len;
+  gsap.to(text, {strokeDashoffset:0, duration:1.6, delay:0.5, ease:'power2.inOut', onComplete:()=>{
+    gsap.to(text, {fill:'#F0D27E', stroke:'transparent', duration:0.5});
+  }});
+
+  window.addEventListener('load', ()=>{
+    gsap.delayedCall(2.6, ()=>{
+      document.getElementById('loader').classList.add('hide');
+      document.body.style.overflow='auto';
+      ScrollTrigger.refresh();
+      playHeroIn();
+    });
+  });
+})();
+
+/* ---------- Nav scroll state ---------- */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', ()=>{
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ---------- Mobile hamburger nav ---------- */
+const navToggle = document.getElementById('navToggle');
+const mobileNav = document.getElementById('mobileNav');
+navToggle.addEventListener('click', ()=>{
+  const open = navToggle.classList.toggle('open');
+  mobileNav.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+mobileNav.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>{
+  navToggle.classList.remove('open');
+  mobileNav.classList.remove('open');
+  document.body.style.overflow = '';
+}));
+
+/* ---------- Fine-pointer detection: only run 3D tilt on devices that can hover with a mouse ---------- */
+const CAN_TILT = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+/* ---------- Hero entrance ---------- */
+function playHeroIn(){
+  const tl = gsap.timeline();
+  tl.from('.hero .eyebrow', {opacity:0, y:20, duration:0.7, ease:'power2.out'})
+    .from('.hero h1', {opacity:0, y:40, duration:1, ease:'power3.out'}, '-=0.4')
+    .from('.hero .sub', {opacity:0, y:20, duration:0.8}, '-=0.5')
+    .from('.hero-cta', {opacity:0, y:20, duration:0.8}, '-=0.5')
+    .from('.silhouette', {opacity:0, x:40, duration:1.2, ease:'power2.out'}, '-=1')
+    .from('.scroll-cue', {opacity:0, duration:0.6}, '-=0.4');
+}
+
+/* ---------- Scroll reveals ---------- */
+gsap.utils.toArray('.reveal').forEach(el=>{
+  gsap.to(el, {
+    opacity:1, y:0, duration:1, ease:'power3.out',
+    scrollTrigger:{ trigger: el, start:'top 85%' }
+  });
+});
+
+/* ---------- Loom weave illustration (craft section) ---------- */
+(function(){
+  const weft = document.getElementById('weftLines');
+  const warpG = document.getElementById('warpLines');
+  const diamonds = document.getElementById('diamonds');
+  for(let i=0;i<20;i++){
+    const y = i*20+10;
+    const l = document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',0); l.setAttribute('y1',y); l.setAttribute('x2',400); l.setAttribute('y2',y);
+    weft.appendChild(l);
+  }
+  for(let i=0;i<20;i++){
+    const x = i*20+10;
+    const l = document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',x); l.setAttribute('y1',0); l.setAttribute('x2',x); l.setAttribute('y2',400);
+    warpG.appendChild(l);
+  }
+  for(let r=0;r<4;r++){
+    for(let c=0;c<4;c++){
+      const cx=60+c*100, cy=60+r*100, s=34;
+      const pts = `${cx},${cy-s} ${cx+s},${cy} ${cx},${cy+s} ${cx-s},${cy}`;
+      const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+      poly.setAttribute('points', pts);
+      poly.setAttribute('opacity', '0.55');
+      diamonds.appendChild(poly);
+    }
+  }
+  gsap.set([weft.children, warpG.children], {scale:0, transformOrigin:'0 0'});
+  ScrollTrigger.create({
+    trigger:'#loomSVG', start:'top 75%',
+    onEnter:()=>{
+      gsap.to(warpG.children, {scaleX:1, duration:0.9, stagger:0.02, ease:'power2.out'});
+      gsap.to(weft.children, {scaleY:1, duration:0.9, stagger:0.02, ease:'power2.out', delay:0.3});
+      gsap.from(diamonds.children, {opacity:0, scale:0, duration:0.6, stagger:0.04, delay:1, ease:'back.out(1.7)'});
+    },
+    once:true
+  });
+})();
+
+/* ---------- Build the swatch grid ---------- */
+const weaves = [
+  {n:'01', name:'Sambalpuri Bandha', desc:'Ikat-tied diamonds in maroon and ivory, the pattern born in the thread itself.', c1:'#5A1420', c2:'#F1E6CE', pat:'diamond'},
+  {n:'02', name:'Kanjivaram Silk', desc:'Temple borders in gold zari against deep emerald silk.', c1:'#153A2C', c2:'#C9A227', pat:'temple'},
+  {n:'03', name:'Banarasi Brocade', desc:'Mughal jaal florals woven through wine and antique gold.', c1:'#3A0F1C', c2:'#8B5E2E', pat:'jaal'},
+  {n:'04', name:'Paithani', desc:'Peacock-feather palloos on royal plum, bordered in gold.', c1:'#33132C', c2:'#F0D27E', pat:'peacock'},
+  {n:'05', name:'Patola Double Ikat', desc:'Geometric precision, tied and dyed on both warp and weft.', c1:'#7C1F2C', c2:'#F1E6CE', pat:'diamond'},
+  {n:'06', name:'Jamdani Muslin', desc:'Featherweight florals, hand-picked into sheer ivory cotton.', c1:'#E7D8B7', c2:'#8B5E2E', pat:'floral'},
+  {n:'07', name:'Chanderi Sheer', desc:'Champagne stripes catching light like rose gold thread.', c1:'#8B5E2E', c2:'#F0D27E', pat:'stripe'},
+  {n:'08', name:'Tussar Wild Silk', desc:'Textured, undyed warmth — the most honest of all our silks.', c1:'#4E1420', c2:'#C9A227', pat:'texture'},
+];
+
+function patternSVG(pat, c1, c2){
+  const svgns = 'http://www.w3.org/2000/svg';
+  let inner = '';
+  if(pat==='diamond'){
+    inner = Array.from({length:36}).map((_,i)=>{
+      const col=i%6, row=Math.floor(i/6), cx=col*60+30, cy=row*90+45;
+      return `<polygon points="${cx},${cy-26} ${cx+26},${cy} ${cx},${cy+26} ${cx-26},${cy}" fill="none" stroke="${c2}" stroke-opacity="0.35" stroke-width="1.5"/>`;
+    }).join('');
+  } else if(pat==='temple'){
+    inner = Array.from({length:8}).map((_,i)=>`<polygon points="${i*45},420 ${i*45+45},420 ${i*45+22},370" fill="${c2}" opacity="0.25"/>`).join('');
+  } else if(pat==='jaal'){
+    inner = Array.from({length:24}).map((_,i)=>{
+      const cx=(i%4)*90+45, cy=Math.floor(i/4)*70+35;
+      return `<circle cx="${cx}" cy="${cy}" r="16" fill="none" stroke="${c2}" stroke-opacity="0.3" stroke-width="1.4"/>`;
+    }).join('');
+  } else if(pat==='peacock'){
+    inner = Array.from({length:5}).map((_,i)=>`<path d="M${60+i*70} 420 C ${40+i*70} 320, ${80+i*70} 260, ${60+i*70} 180" stroke="${c2}" stroke-opacity="0.35" stroke-width="2" fill="none"/>`).join('');
+  } else if(pat==='floral'){
+    inner = Array.from({length:30}).map((_,i)=>{
+      const cx=(i%6)*60+30, cy=Math.floor(i/6)*80+40;
+      return `<circle cx="${cx}" cy="${cy}" r="4" fill="${c2}" opacity="0.4"/>`;
+    }).join('');
+  } else if(pat==='stripe'){
+    inner = Array.from({length:14}).map((_,i)=>`<rect x="${i*28}" y="0" width="10" height="420" fill="${c2}" opacity="0.18"/>`).join('');
+  } else if(pat==='dots'){
+    inner = Array.from({length:70}).map((_,i)=>{
+      const cx=(i%10)*38+19, cy=Math.floor(i/10)*38+19;
+      return `<circle cx="${cx}" cy="${cy}" r="9" fill="none" stroke="${c2}" stroke-opacity="0.45" stroke-width="1.6"/><circle cx="${cx}" cy="${cy}" r="2.4" fill="${c2}" opacity="0.4"/>`;
+    }).join('');
+  } else if(pat==='wave'){
+    inner = Array.from({length:16}).map((_,i)=>{
+      const y=i*28;
+      return `<path d="M0 ${y} Q45 ${y-16} 90 ${y} T180 ${y} T270 ${y} T360 ${y}" stroke="${c2}" stroke-opacity="0.32" stroke-width="1.6" fill="none"/>`;
+    }).join('');
+  } else if(pat==='block'){
+    inner = Array.from({length:48}).map((_,i)=>{
+      const col=i%8, row=Math.floor(i/8), x=col*45+8, y=row*60+8;
+      return `<rect x="${x}" y="${y}" width="24" height="24" fill="none" stroke="${c2}" stroke-opacity="0.4" stroke-width="1.4"/>`;
+    }).join('');
+  } else if(pat==='check'){
+    inner = Array.from({length:12}).map((_,i)=>`<rect x="${i*32}" y="0" width="16" height="420" fill="${c2}" opacity="0.14"/>`).join('') +
+            Array.from({length:14}).map((_,i)=>`<rect x="0" y="${i*32}" width="360" height="16" fill="${c2}" opacity="0.14"/>`).join('');
+  } else if(pat==='paisley'){
+    inner = Array.from({length:15}).map((_,i)=>{
+      const cx=(i%5)*72+36, cy=Math.floor(i/5)*130+65;
+      return `<path d="M${cx} ${cy-24} C ${cx+24} ${cy-24}, ${cx+24} ${cy+10}, ${cx} ${cy+18} C ${cx-16} ${cy+22}, ${cx-20} ${cy+2}, ${cx-4} ${cy-4} C ${cx-4} ${cy-16}, ${cx-8} ${cy-22}, ${cx} ${cy-24}Z" fill="none" stroke="${c2}" stroke-opacity="0.4" stroke-width="1.3"/>`;
+    }).join('');
+  } else if(pat==='border'){
+    inner = `<rect x="0" y="0" width="360" height="34" fill="${c2}" opacity="0.3"/><rect x="0" y="386" width="360" height="34" fill="${c2}" opacity="0.3"/>` +
+      Array.from({length:18}).map((_,i)=>`<circle cx="${i*20+10}" cy="17" r="4" fill="${c2}" opacity="0.5"/><circle cx="${i*20+10}" cy="403" r="4" fill="${c2}" opacity="0.5"/>`).join('');
+  } else if(pat==='motif'){
+    inner = Array.from({length:12}).map((_,i)=>{
+      const cx=(i%4)*90+45, cy=Math.floor(i/4)*140+70;
+      return `<circle cx="${cx}" cy="${cy}" r="30" fill="none" stroke="${c2}" stroke-opacity="0.35" stroke-width="1.6"/><circle cx="${cx}" cy="${cy}" r="4" fill="${c2}" opacity="0.4"/>`;
+    }).join('');
+  } else {
+    inner = Array.from({length:60}).map((_,i)=>{
+      const x=Math.random()*360, y=Math.random()*420;
+      return `<circle cx="${x}" cy="${y}" r="${Math.random()*1.6+0.4}" fill="${c2}" opacity="0.3"/>`;
+    }).join('');
+  }
+  const uid = 'g' + (patternSVG._n = (patternSVG._n||0) + 1);
+  const sheen = `
+    <defs>
+      <linearGradient id="sheen-${uid}" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22"/>
+        <stop offset="30%" stop-color="#ffffff" stop-opacity="0.02"/>
+        <stop offset="65%" stop-color="#000000" stop-opacity="0.05"/>
+        <stop offset="100%" stop-color="#000000" stop-opacity="0.4"/>
+      </linearGradient>
+      <radialGradient id="vig-${uid}" cx="50%" cy="35%" r="75%">
+        <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#000000" stop-opacity="0.45"/>
+      </radialGradient>
+    </defs>`;
+  const overlay = `<rect width="360" height="420" fill="url(#sheen-${uid})"/><rect width="360" height="420" fill="url(#vig-${uid})"/>`;
+  return `<svg viewBox="0 0 360 420" xmlns="${svgns}" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;">
+    ${sheen}<rect width="360" height="420" fill="${c1}"/>${inner}${overlay}</svg>`;
+}
+
+/* ---------- Region data: every state, its signature weave & pattern ---------- */
+const STATES = [
+  {id:'odisha', ic:'🏛️', name:'Odisha', sig:'Sambalpuri Ikat', pat:'diamond', c1:'#4E1420', c2:'#F1E6CE',
+    sarees:['Sambalpuri','Bomkai','Pasapalli','Kotpad','Berhampuri Silk','Nuapatna Khandua','Gopalpur Tussar','Habaspuri','Sonpuri','Dolabedi','Sonepuri Silk','Maniabandha Ikat']},
+  {id:'bengal', ic:'👑', name:'West Bengal', sig:'Baluchari', pat:'motif', c1:'#3A0F1C', c2:'#F0D27E',
+    sarees:['Baluchari','Swarnachari','Jamdani','Dhakai Jamdani','Tant','Garad','Murshidabad Silk','Begumpuri','Kantha Stitch Saree','Bengal Cotton','Bishnupuri Silk']},
+  {id:'up', ic:'👑', name:'Uttar Pradesh', sig:'Banarasi Silk', pat:'jaal', c1:'#5A1420', c2:'#C9A227',
+    sarees:['Banarasi Silk','Banarasi Katan','Banarasi Organza','Banarasi Tissue','Banarasi Georgette','Banarasi Jangla','Banarasi Tanchoi','Banarasi Cutwork','Banarasi Butidar','Banarasi Brocade']},
+  {id:'tn', ic:'👑', name:'Tamil Nadu', sig:'Kanjivaram Silk', pat:'temple', c1:'#153A2C', c2:'#F0D27E',
+    sarees:['Kanchipuram Silk','Kanjivaram Silk','Arani Silk','Chettinad Cotton','Coimbatore Cotton','Salem Silk','Madurai Cotton','Sungudi Cotton','Thirubuvanam Silk','Kovai Cotton']},
+  {id:'ka', ic:'👑', name:'Karnataka', sig:'Mysore Silk', pat:'check', c1:'#33132C', c2:'#C9A227',
+    sarees:['Mysore Silk','Ilkal Saree','Molakalmuru Saree','Udupi Cotton','Kasuti Saree']},
+  {id:'ap', ic:'👑', name:'Andhra Pradesh', sig:'Pochampally Ikat', pat:'diamond', c1:'#7C1F2C', c2:'#F1E6CE',
+    sarees:['Mangalagiri Cotton','Venkatagiri Saree','Uppada Silk','Dharmavaram Silk','Gadwal Saree','Narayanpet Saree','Chirala Cotton','Pochampally Silk','Pochampally Ikat','Guntur Cotton']},
+  {id:'tg', ic:'👑', name:'Telangana', sig:'Pochampally Ikat', pat:'diamond', c1:'#8B5E2E', c2:'#F1E6CE',
+    sarees:['Pochampally Ikat','Gadwal Silk','Narayanpet Cotton','Siddipet Gollabhama','Kothakota Saree']},
+  {id:'gj', ic:'👑', name:'Gujarat', sig:'Patola', pat:'dots', c1:'#7C1F2C', c2:'#F1E6CE',
+    sarees:['Patola','Rajkot Patola','Bandhani','Gharchola','Panetar','Kutchi Bandhani','Mashru Silk','Ajrakh Saree','Tangaliya Saree']},
+  {id:'rj', ic:'👑', name:'Rajasthan', sig:'Leheriya', pat:'wave', c1:'#8B5E2E', c2:'#F1E6CE',
+    sarees:['Leheriya','Bandhej','Kota Doria','Kota Cotton','Sanganeri Print','Bagru Print','Zari Kota','Chundri']},
+  {id:'mp', ic:'👑', name:'Madhya Pradesh', sig:'Chanderi', pat:'stripe', c1:'#8B5E2E', c2:'#F0D27E',
+    sarees:['Chanderi','Maheshwari','Bagh Print Saree','Batik Saree']},
+  {id:'mh', ic:'👑', name:'Maharashtra', sig:'Paithani', pat:'peacock', c1:'#33132C', c2:'#F0D27E',
+    sarees:['Paithani','Yeola Paithani','Nauvari','Narayan Peth','Karvati Kathi','Kosa Silk']},
+  {id:'cg', ic:'👑', name:'Chhattisgarh', sig:'Kosa Silk', pat:'texture', c1:'#4E1420', c2:'#C9A227',
+    sarees:['Kosa Silk','Bastar Cotton']},
+  {id:'br', ic:'👑', name:'Bihar', sig:'Bhagalpuri Silk', pat:'motif', c1:'#4E1420', c2:'#C9A227',
+    sarees:['Bhagalpuri Silk','Tussar Silk','Madhubani Painted Saree','Sujani Saree']},
+  {id:'jh', ic:'👑', name:'Jharkhand', sig:'Tussar Silk', pat:'texture', c1:'#8B5E2E', c2:'#F1E6CE',
+    sarees:['Tussar Silk','Tribal Handloom Saree']},
+  {id:'as', ic:'👑', name:'Assam', sig:'Muga Silk', pat:'texture', c1:'#8B5E2E', c2:'#F0D27E',
+    sarees:['Muga Silk','Eri Silk','Pat Silk','Mekhela Chador','Assam Silk']},
+  {id:'ml', ic:'👑', name:'Meghalaya', sig:'Ryndia Silk', pat:'texture', c1:'#153A2C', c2:'#8B5E2E',
+    sarees:['Ryndia Silk Saree']},
+  {id:'mn', ic:'👑', name:'Manipur', sig:'Moirang Phee', pat:'stripe', c1:'#4E1420', c2:'#F1E6CE',
+    sarees:['Moirang Phee','Leirum Saree']},
+  {id:'kl', ic:'👑', name:'Kerala', sig:'Kasavu Saree', pat:'border', c1:'#F1E6CE', c2:'#C9A227',
+    sarees:['Kasavu Saree','Settu Mundu','Kerala Cotton','Balaramapuram Saree']},
+  {id:'pb', ic:'👑', name:'Punjab', sig:'Phulkari', pat:'floral', c1:'#7C1F2C', c2:'#F0D27E',
+    sarees:['Phulkari Saree','Punjabi Cotton Saree']},
+  {id:'hp', ic:'👑', name:'Himachal Pradesh', sig:'Kullu Handloom', pat:'stripe', c1:'#33132C', c2:'#C9A227',
+    sarees:['Kullu Handloom Saree']},
+  {id:'jk', ic:'👑', name:'Jammu & Kashmir', sig:'Kashmiri Pashmina', pat:'paisley', c1:'#153A2C', c2:'#F0D27E',
+    sarees:['Kashmiri Silk Saree','Sozni Embroidery Saree','Pashmina Saree']},
+  {id:'goa', ic:'👑', name:'Goa', sig:'Kunbi Saree', pat:'check', c1:'#8B5E2E', c2:'#F1E6CE',
+    sarees:['Kunbi Saree']},
+];
+
+/* ---------- Region Explorer: render pills + interactive panel ---------- */
+(function(){
+  const pillsWrap = document.getElementById('regionPills');
+  const bg = document.getElementById('regionPanelBg');
+  const nameEl = document.getElementById('regionName');
+  const eyebrowEl = document.getElementById('regionEyebrow');
+  const sigEl = document.getElementById('regionSignature');
+  const countEl = document.getElementById('regionCount');
+  const listEl = document.getElementById('regionSareeList');
+
+  STATES.forEach(s=>{
+    const btn = document.createElement('button');
+    btn.className = 'region-pill';
+    btn.innerHTML = `<span class="ic">${s.ic}</span>${s.name}`;
+    btn.dataset.id = s.id;
+    btn.addEventListener('click', ()=> setRegion(s.id, true));
+    pillsWrap.appendChild(btn);
+  });
+
+  function setRegion(id, animate){
+    const s = STATES.find(x=>x.id===id);
+    if(!s) return;
+    pillsWrap.querySelectorAll('.region-pill').forEach(p=>p.classList.toggle('active', p.dataset.id===id));
+
+    const render = ()=>{
+      bg.innerHTML = patternSVG(s.pat, s.c1, s.c2);
+      eyebrowEl.textContent = `${s.ic} ${s.name}`;
+      nameEl.textContent = s.name;
+      sigEl.textContent = `Signature: ${s.sig}`;
+      countEl.textContent = `${s.sarees.length} weave${s.sarees.length>1?'s':''} from this state`;
+      listEl.innerHTML = s.sarees.map(name=>`<span class="region-chip">${name}</span>`).join('');
+      gsap.from(listEl.children, {opacity:0, y:10, duration:0.5, stagger:0.03, ease:'power2.out'});
+    };
+
+    if(animate && window.gsap){
+      gsap.to('#regionPanel .region-panel-content', {opacity:0, y:10, duration:0.25, onComplete:()=>{
+        render();
+        gsap.fromTo('#regionPanel .region-panel-content', {opacity:0, y:10}, {opacity:1, y:0, duration:0.45, ease:'power2.out'});
+      }});
+    } else {
+      render();
+    }
+  }
+
+  setRegion('odisha', false);
+})();
+
+/* ---------- Refine chips: fabric / weaving style / occasion ---------- */
+const FABRICS = ['Pure Silk','Mulberry Silk','Muga Silk','Eri Silk','Tussar Silk','Cotton','Linen','Organza','Tissue','Chiffon','Georgette','Crepe','Satin','Velvet','Net','Muslin','Kota Cotton','Khadi Cotton','Bamboo Silk','Modal Silk','Cotton Silk','Silk Cotton','Raw Silk','Art Silk','Poly Silk'];
+const WEAVE_STYLES = ['Ikat','Double Ikat','Single Ikat','Jacquard','Brocade','Zari Weaving','Handloom','Powerloom','Jamdani','Kalamkari','Kantha','Kasuti','Phulkari','Chikankari','Block Print','Bagru Print','Sanganeri Print','Batik','Ajrakh','Bandhani','Leheriya','Tie & Dye','Hand Painted','Digital Print','Embroidery','Mirror Work','Sequence Work','Resham Work','Stone Work','Gota Patti'];
+const OCCASIONS = ['Bridal Sarees','Wedding Sarees','Reception Sarees','Festive Sarees','Temple Sarees','Party Wear Sarees','Designer Sarees','Luxury Couture Sarees','Office Wear Sarees','Daily Wear Sarees','Casual Sarees','Celebrity Collection','Handloom Collection','Heritage Collection','Royal Collection','Premium Collection','Limited Edition Sarees'];
+
+function fillChips(elId, list){
+  document.getElementById(elId).innerHTML = list.map(x=>`<span class="chip">${x}</span>`).join('');
+}
+fillChips('fabricChips', FABRICS);
+fillChips('weaveChips', WEAVE_STYLES);
+fillChips('occasionChips', OCCASIONS);
+
+const grid = document.getElementById('swatchGrid');
+weaves.forEach(w=>{
+  const card = document.createElement('div');
+  card.className = 'swatch reveal';
+  card.innerHTML = `
+    <div class="swatch-fold">${patternSVG(w.pat, w.c1, w.c2)}</div>
+    <div class="swatch-glow"></div>
+    <div class="swatch-label">
+      <div class="num">${w.n}</div>
+      <h3>${w.name}</h3>
+      <p>${w.desc}</p>
+    </div>`;
+  grid.appendChild(card);
+});
+gsap.utils.toArray('.swatch').forEach(el=>{
+  gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out', scrollTrigger:{trigger:el, start:'top 90%'}});
+});
+
+/* ---------- Editorial strip ---------- */
+const edCaps = ['The Palloo, Unfolded','A Study in Zari','Weight of the Border','Silk in Low Light','The Pleat, Held'];
+const edCols = [['#5A1420','#C9A227'],['#153A2C','#F0D27E'],['#33132C','#C9A227'],['#3A0F1C','#8B5E2E'],['#7C1F2C','#F1E6CE']];
+const edScroll = document.getElementById('editorialScroll');
+edCaps.forEach((cap,i)=>{
+  const [c1,c2] = edCols[i];
+  const card = document.createElement('div');
+  card.className = 'editorial-card';
+  card.innerHTML = `${patternSVG(['diamond','temple','jaal','stripe','floral'][i%5], c1, c2)}<div class="cap">${cap}</div>`;
+  edScroll.appendChild(card);
+});
+
+/* ---------- Heritage art panel ---------- */
+document.getElementById('heritageArt').innerHTML = patternSVG('diamond','#33132C','#F0D27E');
+
+/* ---------- Mouse-reactive silk sheen on hero (with subtle 3D depth) ---------- */
+const heroEl = document.querySelector('.hero');
+heroEl.addEventListener('mousemove', (e)=>{
+  const x = (e.clientX/window.innerWidth - 0.5) * 20;
+  const y = (e.clientY/window.innerHeight - 0.5) * 20;
+  gsap.to('.silhouette', {x:x*0.6, y:y*0.4, duration:0.6, ease:'power2.out'});
+  gsap.to('.hero h1', {x:x*0.2, duration:0.6, ease:'power2.out'});
+  if(CAN_TILT){
+    gsap.to('.hero-inner', {rotateY:x*0.15, rotateX:-y*0.15, duration:0.7, ease:'power2.out', transformPerspective:900});
+  }
+});
+heroEl.addEventListener('mouseleave', ()=>{
+  gsap.to('.hero-inner', {rotateY:0, rotateX:0, duration:0.9, ease:'power3.out'});
+});
+
+/* ---------- Generic 3D tilt for cards (fine-pointer devices only) ---------- */
+function apply3DTilt(selector, {maxTilt=9, lift=-10, scale=1.015}={}){
+  if(!CAN_TILT) return;
+  document.querySelectorAll(selector).forEach(card=>{
+    card.addEventListener('mousemove', (e)=>{
+      const rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left)/rect.width - 0.5;
+      const py = (e.clientY - rect.top)/rect.height - 0.5;
+      gsap.to(card, {
+        rotateY: px*maxTilt, rotateX: -py*maxTilt, y: lift, scale,
+        transformPerspective: 900, duration: 0.5, ease: 'power2.out'
+      });
+    });
+    card.addEventListener('mouseleave', ()=>{
+      gsap.to(card, {rotateY:0, rotateX:0, y:0, scale:1, duration:0.7, ease:'power3.out'});
+    });
+  });
+}
+// Applied once content is in the DOM (swatches / editorial cards render synchronously above).
+apply3DTilt('.swatch', {maxTilt:8, lift:-12, scale:1.02});
+apply3DTilt('.editorial-card', {maxTilt:10, lift:-6, scale:1.03});
+apply3DTilt('.region-panel', {maxTilt:2.5, lift:0, scale:1.005});
+apply3DTilt('.heritage-frame', {maxTilt:6, lift:0, scale:1.01});
+</script>
+</body>
+</html>
