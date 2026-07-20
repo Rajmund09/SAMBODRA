@@ -305,9 +305,10 @@ section{position:relative;padding:150px 6vw;}
 .chip-cloud{display:flex;flex-wrap:wrap;gap:8px;}
 .chip-cloud .chip{
   font-size:.76rem;padding:7px 14px;border:1px solid rgba(201,162,39,.3);color:var(--ivory-dim);
-  border-radius:2px;cursor:default;transition:border-color .3s ease,color .3s ease,background .3s ease;
+  border-radius:2px;cursor:pointer;transition:border-color .3s ease,color .3s ease,background .3s ease;
 }
 .chip-cloud .chip:hover{border-color:var(--gold);color:var(--ivory);background:rgba(201,162,39,.08);}
+.chip-cloud .chip.active{border-color:var(--gold);color:var(--ink);background:var(--gold);font-weight:600;}
 
 /* ============ SWATCH GRID (PRODUCT) ============ */
 .swatch-grid{
@@ -433,6 +434,48 @@ footer{position:relative;background:var(--wine);padding-top:0;}
   border-top:1px solid rgba(201,162,39,.2);padding:26px 6vw;display:flex;justify-content:space-between;
   font-size:.72rem;color:var(--ivory-dim);letter-spacing:.05em;flex-wrap:wrap;gap:10px;
 }
+
+/* ============ TOAST & MODAL ============ */
+#toast {
+  position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%);
+  background: var(--gold); color: var(--ink); padding: 12px 24px;
+  border-radius: 4px; font-size: .85rem; font-weight: 600; z-index: 9999;
+  opacity: 0; transition: bottom 0.4s ease, opacity 0.4s ease; pointer-events: none;
+}
+#toast.show { bottom: 30px; opacity: 1; }
+
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(27,14,12,0.9); backdrop-filter: blur(8px);
+  z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-overlay.open { opacity: 1; visibility: visible; }
+.modal-content {
+  background: var(--wine); border: 1px solid rgba(201,162,39,.3);
+  max-width: 800px; width: 100%; display: grid; grid-template-columns: 1fr 1fr;
+  border-radius: 4px; overflow: hidden; position: relative;
+  transform: translateY(20px); transition: transform 0.4s ease;
+}
+.modal-overlay.open .modal-content { transform: translateY(0); }
+@media(max-width: 700px) { .modal-content { grid-template-columns: 1fr; max-height: 90vh; overflow-y: auto; } }
+.modal-close {
+  position: absolute; top: 16px; right: 16px; background: none; border: none;
+  color: var(--gold-light); font-size: 2rem; cursor: pointer; z-index: 10; line-height: 1;
+}
+.modal-close:hover { color: var(--ivory); }
+.modal-image { background: var(--ink); display: flex; align-items: center; justify-content: center; min-height: 300px; position:relative; overflow:hidden;}
+.modal-image svg { width: 100%; height: 100%; object-fit: cover; }
+.modal-details { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+.modal-details .eyebrow { margin-bottom: 12px; }
+.modal-details h3 { font-family: var(--font-display); font-size: 2rem; color: var(--ivory); margin-bottom: 16px; }
+.modal-details p { color: var(--ivory-dim); font-size: .9rem; line-height: 1.6; margin-bottom: 24px; font-weight: 300; }
+.modal-cta {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--gold); color: var(--ink); padding: 12px 24px; text-decoration: none;
+  font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; font-weight: 600;
+  border-radius: 2px; transition: background 0.3s ease; border: none; cursor:pointer;
+}
+.modal-cta:hover { background: var(--gold-light); }
 
 /* ============ REVEAL UTIL ============ */
 .reveal{opacity:0;transform:translateY(40px);}
@@ -668,7 +711,7 @@ footer{position:relative;background:var(--wine);padding-top:0;}
   <span class="eyebrow">Join the Loom</span>
   <h2 class="stitched">Be first to the new weave</h2>
   <p>A quiet note, a few times a season, when a new bandha pattern comes off the loom.</p>
-  <form class="loom-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Woven In ✓';">
+  <form class="loom-form" onsubmit="event.preventDefault(); showToast('Thank you for subscribing! You are now woven in.'); this.reset();">
     <input type="email" placeholder="Your email" required>
     <button type="submit">Subscribe</button>
   </form>
@@ -1022,14 +1065,20 @@ const WEAVE_STYLES = ['Ikat','Double Ikat','Single Ikat','Jacquard','Brocade','Z
 const OCCASIONS = ['Bridal Sarees','Wedding Sarees','Reception Sarees','Festive Sarees','Temple Sarees','Party Wear Sarees','Designer Sarees','Luxury Couture Sarees','Office Wear Sarees','Daily Wear Sarees','Casual Sarees','Celebrity Collection','Handloom Collection','Heritage Collection','Royal Collection','Premium Collection','Limited Edition Sarees'];
 
 function fillChips(elId, list){
-  document.getElementById(elId).innerHTML = list.map(x=>`<span class="chip">${x}</span>`).join('');
+  const container = document.getElementById(elId);
+  container.innerHTML = list.map(x=>`<span class="chip">${x}</span>`).join('');
+  container.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+      this.classList.toggle('active');
+    });
+  });
 }
 fillChips('fabricChips', FABRICS);
 fillChips('weaveChips', WEAVE_STYLES);
 fillChips('occasionChips', OCCASIONS);
 
 const grid = document.getElementById('swatchGrid');
-weaves.forEach(w=>{
+weaves.forEach((w, index) => {
   const card = document.createElement('div');
   card.className = 'swatch reveal';
   card.innerHTML = `
@@ -1040,6 +1089,7 @@ weaves.forEach(w=>{
       <h3>${w.name}</h3>
       <p>${w.desc}</p>
     </div>`;
+  card.addEventListener('click', () => openModal(index));
   grid.appendChild(card);
 });
 gsap.utils.toArray('.swatch').forEach(el=>{
@@ -1099,6 +1149,59 @@ apply3DTilt('.swatch', {maxTilt:8, lift:-12, scale:1.02});
 apply3DTilt('.editorial-card', {maxTilt:10, lift:-6, scale:1.03});
 apply3DTilt('.region-panel', {maxTilt:2.5, lift:0, scale:1.005});
 apply3DTilt('.heritage-frame', {maxTilt:6, lift:0, scale:1.01});
+
+/* ---------- Modal & Toast Logic ---------- */
+function showToast(msg) {
+  const toast = document.getElementById('toast') || (()=>{
+    const t = document.createElement('div'); t.id = 'toast';
+    document.body.appendChild(t); return t;
+  })();
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+document.querySelectorAll('a[href="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    showToast("This feature is coming soon!");
+  });
+});
+
+const modalHtml = `
+<div class="modal-overlay" id="productModal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div class="modal-image" id="modalImage"></div>
+    <div class="modal-details">
+      <span class="eyebrow" id="modalNum">01</span>
+      <h3 id="modalTitle">Title</h3>
+      <p id="modalDesc">Desc</p>
+      <button class="modal-cta" onclick="showToast('Added to your atelier collection')">Add to Collection</button>
+    </div>
+  </div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+function openModal(index) {
+  const w = weaves[index];
+  document.getElementById('modalImage').innerHTML = patternSVG(w.pat, w.c1, w.c2);
+  document.getElementById('modalNum').textContent = w.n;
+  document.getElementById('modalTitle').textContent = w.name;
+  document.getElementById('modalDesc').textContent = w.desc;
+  document.getElementById('productModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('productModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('productModal').addEventListener('click', e => {
+  if (e.target.id === 'productModal') closeModal();
+});
 </script>
 </body>
 </html>
