@@ -16,3 +16,10 @@ SAMBODRA is a web project featuring "BANDHA — The Thread That Binds", a beauti
 
 ## Getting Started
 Simply open `bandha.html` in any modern web browser to view the project. No build steps or server are required!
+
+## Project Structure
+The repository features a scaffolded directory structure under `apps/web/` for future web application development, including folders for:
+- `animations/`
+- `assets/`
+- `components/`
+- `features/`
