@@ -2,10 +2,12 @@
 
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { useModal } from '../providers/ModalProvider';
 
 export default function Hero({ animateIn }: { animateIn: boolean }) {
   const heroRef = useRef<HTMLElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
+  const { setIsSearchOpen } = useModal();
 
   useEffect(() => {
     if (!animateIn) return;
@@ -14,7 +16,7 @@ export default function Hero({ animateIn }: { animateIn: boolean }) {
     tl.from('.hero .eyebrow', { opacity: 0, y: 20, duration: 0.7, ease: 'power2.out' })
       .from('.hero h1', { opacity: 0, y: 40, duration: 1, ease: 'power3.out' }, '-=0.4')
       .from('.hero .sub', { opacity: 0, y: 20, duration: 0.8 }, '-=0.5')
-      .from('.hero-cta', { opacity: 0, y: 20, duration: 0.8 }, '-=0.5')
+      .from('.hero-actions', { opacity: 0, y: 20, duration: 0.8 }, '-=0.5')
       .from('.silhouette', { opacity: 0, x: 40, duration: 1.2, ease: 'power2.out' }, '-=1')
       .from('.scroll-cue', { opacity: 0, duration: 0.6 }, '-=0.4');
   }, [animateIn]);
@@ -63,7 +65,7 @@ export default function Hero({ animateIn }: { animateIn: boolean }) {
         <svg viewBox="0 0 260 620" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="silGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#8B5E2E" stopOpacity="0.55"/>
+              <stop offset="0%" stopColor="#C9A227" stopOpacity="0.55"/>
               <stop offset="100%" stopColor="#1B0E0C" stopOpacity="0.85"/>
             </linearGradient>
           </defs>
@@ -71,14 +73,28 @@ export default function Hero({ animateIn }: { animateIn: boolean }) {
         </svg>
       </div>
       <div ref={innerRef} className="hero-inner" style={{ visibility: animateIn ? 'visible' : 'hidden' }}>
-        <span className="eyebrow">Sambalpuri Ikat · House of Bandha</span>
+        <span className="eyebrow">House of Royal Ikat · Sambalpuri & Master Handlooms</span>
         <h1 className="stitched">BANDHA</h1>
-        <p className="sub">Every thread is tied before it is dyed, dyed before it is woven, and woven before it is worn — the bond that gives Bandha its name.</p>
-        <a href="#weaves" className="hero-cta"><span>Discover the Weaves</span></a>
+        <p className="sub">
+          Every thread is tied before it is dyed, dyed before it is woven, and woven before it is worn — the eternal bond that gives Bandha its royal name.
+        </p>
+        <div className="hero-actions">
+          <a href="#weaves" className="hero-cta">
+            <span>Explore Iconic Weaves</span>
+          </a>
+          <button 
+            className="hero-secondary-btn"
+            onClick={() => setIsSearchOpen(true)}
+          >
+            <span>Search Catalog 🔍</span>
+          </button>
+        </div>
       </div>
       <div className="scroll-cue" style={{ visibility: animateIn ? 'visible' : 'hidden' }}>
-        <span>Scroll</span><span className="line"></span>
+        <span>Scroll to Discover</span>
+        <span className="line"></span>
       </div>
     </header>
   );
 }
+
