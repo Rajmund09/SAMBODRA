@@ -1,35 +1,71 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { patternSVG } from '../utils/patterns';
+import React from 'react';
+
+const TIMELINE_EVENTS = [
+  {
+    year: '12th Century',
+    title: 'The Divine Jagannath Offering',
+    desc: 'The earliest historical records of Bandha Ikat tie-dye silk woven exclusively for the robes of Lord Jagannath in Puri, Odisha.'
+  },
+  {
+    year: '18th Century',
+    title: 'Royal Court Patronage',
+    desc: 'Maratha and Odia kings grant royal charters to weaver guilds in Bargarh, Sonepur, and Nuapatna, elevating Bandha to state treasury status.'
+  },
+  {
+    year: '1950s',
+    title: 'Master Weaver Radhamohan Meher',
+    desc: 'Pioneered complex double-Ikat calligraphic poetry and temple motif weaving, earning international acclaim for Sambalpuri textiles.'
+  },
+  {
+    year: 'Present Day',
+    title: 'The House of BANDHA Atelier',
+    desc: 'Uniting 214 master artisan families across 22 states, preserving heirloom purity, 100% organic dyes, and certified gold zari.'
+  }
+];
 
 export default function Heritage() {
-  const [svgStr, setSvgStr] = useState('');
-  
-  useEffect(() => {
-    setSvgStr(patternSVG('diamond', '#33132C', '#F0D27E'));
-  }, []);
-
   return (
-    <section id="heritage" className="tex-plum">
-      <div className="heritage">
-        <div className="heritage-copy reveal">
-          <span className="eyebrow">The Weavers</span>
-          <h2 className="stitched" style={{ fontSize: 'clamp(2.2rem,4vw,3.4rem)' }}>Four generations at one loom</h2>
-          <span className="thread-rule left" style={{ margin: '18px 0 26px' }}></span>
-          <p>Behind every Bandha saree is a family, not a factory. Our weaving partners in Odisha, Varanasi, Paithan, and Kanchipuram have passed their pit-looms from grandparent to grandchild, each generation adding its own small correction to a pattern centuries old.</p>
-          <p>We pay by the saree, not the hour — because a Kanjivaram border deserves the eleven days it asks for, and a Jamdani motif cannot be rushed toward a deadline it does not recognise.</p>
-          <div className="heritage-stats">
-            <div className="stat"><b>214</b><span>Weaver Families</span></div>
-            <div className="stat"><b>11</b><span>Days per Border</span></div>
-            <div className="stat"><b>4</b><span>Generations</span></div>
-          </div>
+    <section id="heritage" className="tex-emerald">
+      <div className="section-head reveal">
+        <span className="eyebrow">800 Years of Lineage</span>
+        <h2 className="stitched">Four Generations at One Loom</h2>
+        <p>
+          Behind every Bandha saree is a family lineage, not a factory. Our weaving partners in Odisha, Varanasi, Paithan, and Kanchipuram preserve techniques unchanged across centuries.
+        </p>
+      </div>
+
+      {/* Stats Bar */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', maxWidth: '900px', margin: '0 auto 60px', textAlign: 'center' }}>
+        <div className="lux-glass-panel" style={{ padding: '24px' }}>
+          <div style={{ fontFamily: 'var(--font-royal)', fontSize: '2.5rem', color: 'var(--gold-bright)', fontWeight: 700 }}>214</div>
+          <div style={{ fontSize: '0.78rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold-light)' }}>Master Weaver Families</div>
         </div>
-        <div className="heritage-frame reveal">
-          <div className="heritage-frame-inner tex-ikat" id="heritageArt" dangerouslySetInnerHTML={{ __html: svgStr }}>
-          </div>
+        <div className="lux-glass-panel" style={{ padding: '24px' }}>
+          <div style={{ fontFamily: 'var(--font-royal)', fontSize: '2.5rem', color: 'var(--gold-bright)', fontWeight: 700 }}>90</div>
+          <div style={{ fontSize: '0.78rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold-light)' }}>Days Average Weave Time</div>
         </div>
+        <div className="lux-glass-panel" style={{ padding: '24px' }}>
+          <div style={{ fontFamily: 'var(--font-royal)', fontSize: '2.5rem', color: 'var(--gold-bright)', fontWeight: 700 }}>100%</div>
+          <div style={{ fontSize: '0.78rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold-light)' }}>Tested Pure Zari & Organic Dyes</div>
+        </div>
+      </div>
+
+      {/* Vertical Archival Timeline */}
+      <div className="heritage-timeline">
+        {TIMELINE_EVENTS.map((evt, idx) => (
+          <div key={idx} className="heritage-item reveal">
+            <div className="heritage-dot"></div>
+            <div className="heritage-content lux-glass-panel">
+              <div className="heritage-year">{evt.year}</div>
+              <h3 style={{ fontFamily: 'var(--font-royal)', fontSize: '1.2rem', color: 'var(--ivory)', marginBottom: '8px' }}>{evt.title}</h3>
+              <p style={{ fontSize: '0.88rem', color: 'var(--ivory-dim)', lineHeight: 1.6 }}>{evt.desc}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
 }
+

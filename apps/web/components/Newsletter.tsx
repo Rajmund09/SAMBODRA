@@ -1,26 +1,42 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useModal } from '../providers/ModalProvider';
 
 export default function Newsletter() {
   const { showToast } = useModal();
+  const [email, setEmail] = useState('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    showToast('Thank you for subscribing! You are now woven in.');
-    e.currentTarget.reset();
+    if (!email) return;
+    showToast('Welcome to the House of BANDHA Atelier VIP Circle.');
+    setEmail('');
   };
 
   return (
-    <div id="loom" className="loom-cta tex-emerald">
-      <span className="eyebrow">Join the Loom</span>
-      <h2 className="stitched">Be first to the new weave</h2>
-      <p>A quiet note, a few times a season, when a new bandha pattern comes off the loom.</p>
-      <form className="loom-form" onSubmit={handleSubmit}>
-        <input type="email" placeholder="Your email" required />
-        <button type="submit">Subscribe</button>
-      </form>
-    </div>
+    <section id="loom" className="tex-plum">
+      <div className="newsletter-card lux-glass-panel reveal">
+        <span className="eyebrow">Atelier Private Concierge</span>
+        <h2 className="stitched" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', margin: '12px 0 16px' }}>
+          Be First to the New Weave
+        </h2>
+        <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', color: 'var(--ivory-dim)', fontStyle: 'italic', maxWidth: '600px', margin: '0 auto' }}>
+          A quiet invitation, delivered a few times a season, whenever a limited-edition master weave comes off the pit-loom.
+        </p>
+
+        <form className="newsletter-form" onSubmit={handleSubmit}>
+          <input 
+            type="email" 
+            placeholder="Enter your email address for private previews..." 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required 
+          />
+          <button type="submit">Join VIP Circle</button>
+        </form>
+      </div>
+    </section>
   );
 }
+
