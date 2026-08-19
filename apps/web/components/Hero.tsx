@@ -3,11 +3,14 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { useModal } from '../providers/ModalProvider';
+import { SAREE_IMAGES } from '../utils/sareeImages';
 
 export default function Hero({ animateIn }: { animateIn: boolean }) {
   const heroRef = useRef<HTMLElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
   const { setIsSearchOpen } = useModal();
+
+  const heroImage = SAREE_IMAGES[0]?.modelImages?.fullDrape?.url;
 
   useEffect(() => {
     if (!animateIn) return;
@@ -61,17 +64,25 @@ export default function Hero({ animateIn }: { animateIn: boolean }) {
   return (
     <header ref={heroRef} className="hero tex-ikat">
       <div className="hero-vignette"></div>
-      <div className="silhouette">
-        <svg viewBox="0 0 260 620" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="silGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#C9A227" stopOpacity="0.55"/>
-              <stop offset="100%" stopColor="#1B0E0C" stopOpacity="0.85"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#silGrad)" d="M132 8c22 0 38 18 38 40 0 14-6 24-14 32 26 10 40 30 46 58 10 46-6 70 4 96 14 36 40 46 46 92 8 60-18 84-18 130 0 40 20 60 20 100 0 30-16 46-40 54-10 4-8 14 2 16 30 6 30 40-2 44H60c-30-4-30-38 0-44 10-2 12-12 2-16-24-8-40-24-40-54 0-40 20-60 20-100 0-46-26-70-18-130 6-46 32-56 46-92 10-26-6-50 4-96 6-28 20-48 46-58-8-8-14-18-14-32 0-22 16-40 38-40z"/>
-        </svg>
+      <div className="silhouette" style={{ opacity: 0.45 }}>
+        {heroImage ? (
+          <div className="photo-hero-frame" style={{ height: '480px', width: '320px' }}>
+            <img src={heroImage} alt="Sambalpuri Bandha Saree Drape" />
+            <div className="hero-vignette" />
+          </div>
+        ) : (
+          <svg viewBox="0 0 260 620" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="silGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#C9A227" stopOpacity="0.55"/>
+                <stop offset="100%" stopColor="#1B0E0C" stopOpacity="0.85"/>
+              </linearGradient>
+            </defs>
+            <path fill="url(#silGrad)" d="M132 8c22 0 38 18 38 40 0 14-6 24-14 32 26 10 40 30 46 58 10 46-6 70 4 96 14 36 40 46 46 92 8 60-18 84-18 130 0 40 20 60 20 100 0 30-16 46-40 54-10 4-8 14 2 16 30 6 30 40-2 44H60c-30-4-30-38 0-44 10-2 12-12 2-16-24-8-40-24-40-54 0-40 20-60 20-100 0-46-26-70-18-130 6-46 32-56 46-92 10-26-6-50 4-96 6-28 20-48 46-58-8-8-14-18-14-32 0-22 16-40 38-40z"/>
+          </svg>
+        )}
       </div>
+
       <div ref={innerRef} className="hero-inner" style={{ visibility: animateIn ? 'visible' : 'hidden' }}>
         <span className="eyebrow">House of Royal Ikat · Sambalpuri & Master Handlooms</span>
         <h1 className="stitched">BANDHA</h1>
@@ -90,6 +101,7 @@ export default function Hero({ animateIn }: { animateIn: boolean }) {
           </button>
         </div>
       </div>
+
       <div className="scroll-cue" style={{ visibility: animateIn ? 'visible' : 'hidden' }}>
         <span>Scroll to Discover</span>
         <span className="line"></span>
@@ -97,4 +109,5 @@ export default function Hero({ animateIn }: { animateIn: boolean }) {
     </header>
   );
 }
+
 
