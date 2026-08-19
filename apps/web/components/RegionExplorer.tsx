@@ -4,18 +4,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { STATES } from '../utils/data';
 import { patternSVG } from '../utils/patterns';
+import { getSareesByState } from '../utils/sareeImages';
 import { useModal } from '../providers/ModalProvider';
 
 export default function RegionExplorer() {
   const [activeRegionId, setActiveRegionId] = useState('odisha');
   const [searchQuery, setSearchQuery] = useState('');
-  const { showToast } = useModal();
+  const { showToast, openModal } = useModal();
   
   const activeRegion = STATES.find(s => s.id === activeRegionId) || STATES[0];
   const [svgStr, setSvgStr] = useState('');
   
   const contentRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+
+  const matchedSarees = getSareesByState(activeRegion.name);
+  const photoAsset = matchedSarees[0]?.productImages?.closeUp?.url || matchedSarees[0]?.modelImages?.fullDrape?.url;
 
   const filteredStates = STATES.filter(s =>
     s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -56,7 +60,7 @@ export default function RegionExplorer() {
         <span className="eyebrow">India, Loom by Loom</span>
         <h2 className="stitched">Choose a State, See Its Silk</h2>
         <p>
-          Every region ties, dyes, and weaves in its own dialect. Select a state to dynamically change the atelier backdrop to match that region's sacred weave.
+          Every region ties, dyes, and weaves in its own dialect. Select a state to dynamically change the atelier backdrop and inspect master photography matching that region's sacred weave.
         </p>
       </div>
 
@@ -84,10 +88,20 @@ export default function RegionExplorer() {
       </div>
 
       <div className="region-panel reveal" id="regionPanel">
-        <div className="region-panel-bg" dangerouslySetInnerHTML={{ __html: svgStr }}></div>
+        {photoAsset ? (
+          <img 
+            src={photoAsset} 
+            alt={activeRegion.name} 
+            className="region-panel-bg" 
+            style={{ objectFit: 'cover' }}
+          />
+        ) : (
+          <div className="region-panel-bg" dangerouslySetInnerHTML={{ __html: svgStr }}></div>
+        )}
         <div className="region-panel-veil"></div>
+
         <div className="region-panel-content" ref={contentRef}>
-          <span className="eyebrow">{activeRegion.ic} {activeRegion.name} Heritage</span>
+          <span className="eyebrow">{activeRegion.ic} {activeRegion.name} Archive</span>
           <h3>{activeRegion.name}</h3>
           <div className="region-signature">Signature Technique: {activeRegion.sig}</div>
           <div className="region-count">
@@ -98,7 +112,17 @@ export default function RegionExplorer() {
               <span 
                 key={saree} 
                 className="region-chip"
-                onClick={() => showToast(`Selected "${saree}" from ${activeRegion.name}`)}
+                onClick={() => {
+                  showToast(`Viewing "${saree}" from ${activeRegion.name}`);
+                  openModal({
+                    n: activeRegion.id.toUpperCase(),
+                    name: saree,
+                    desc: `Traditional handwoven ${saree} from ${activeRegion.name}, featuring ${activeRegion.sig} craftsmanship.`,
+                    c1: activeRegion.c1,
+                    c2: activeRegion.c2,
+                    pat: activeRegion.pat
+                  });
+                }}
                 style={{ cursor: 'pointer' }}
               >
                 {saree}
@@ -110,4 +134,5 @@ export default function RegionExplorer() {
     </section>
   );
 }
+
 
