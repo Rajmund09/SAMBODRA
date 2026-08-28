@@ -7,6 +7,7 @@ import Hero from '../components/Hero';
 import Marquee from '../components/Marquee';
 import CraftTimeline from '../components/CraftTimeline';
 import Craft from '../components/Craft';
+import LoomSimulator from '../components/LoomSimulator';
 import RegionExplorer from '../components/RegionExplorer';
 import Weaves from '../components/Weaves';
 import Refine from '../components/Refine';
@@ -16,6 +17,9 @@ import Newsletter from '../components/Newsletter';
 import Footer from '../components/Footer';
 import AtelierDrawer from '../components/AtelierDrawer';
 import QuickSearch from '../components/QuickSearch';
+import CompareDrawer from '../components/CompareDrawer';
+import CheckoutModal from '../components/CheckoutModal';
+import ConciergeBookingModal from '../components/ConciergeBookingModal';
 
 export default function Home() {
   const [animateIn, setAnimateIn] = useState(false);
@@ -28,6 +32,7 @@ export default function Home() {
       <Marquee />
       <CraftTimeline />
       <Craft />
+      <LoomSimulator />
       <RegionExplorer />
       <Weaves />
       <Refine />
@@ -36,10 +41,14 @@ export default function Home() {
       <Newsletter />
       <Footer />
 
-      {/* Global Interactive Overlays */}
+      {/* Global Interactive Overlays & Modals */}
       <AtelierDrawer />
       <QuickSearch />
+      <CompareDrawer />
+      <CheckoutModal />
+      <ConciergeBookingModal />
     </>
   );
 }
+
 

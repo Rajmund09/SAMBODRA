@@ -4,13 +4,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { STATES } from '../utils/data';
 import { patternSVG } from '../utils/patterns';
-import { getSareesByState } from '../utils/sareeImages';
+import { getSareesByState, SAREE_IMAGES } from '../utils/sareeImages';
 import { useModal } from '../providers/ModalProvider';
 
 export default function RegionExplorer() {
   const [activeRegionId, setActiveRegionId] = useState('odisha');
   const [searchQuery, setSearchQuery] = useState('');
-  const { showToast, openModal } = useModal();
+  const { showToast, openModal, playSound } = useModal();
   
   const activeRegion = STATES.find(s => s.id === activeRegionId) || STATES[0];
   const [svgStr, setSvgStr] = useState('');
@@ -19,7 +19,9 @@ export default function RegionExplorer() {
   const listRef = useRef<HTMLDivElement>(null);
 
   const matchedSarees = getSareesByState(activeRegion.name);
-  const photoAsset = matchedSarees[0]?.productImages?.closeUp?.url || matchedSarees[0]?.modelImages?.fullDrape?.url;
+  const photoAsset = matchedSarees[0]?.productImages?.closeUp?.url || 
+                    matchedSarees[0]?.modelImages?.fullDrape?.url || 
+                    SAREE_IMAGES[0]?.productImages?.closeUp?.url;
 
   const filteredStates = STATES.filter(s =>
     s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -39,7 +41,7 @@ export default function RegionExplorer() {
 
   const handleRegionChange = (id: string) => {
     if (id === activeRegionId) return;
-    
+    playSound('click');
     if (contentRef.current) {
       gsap.to(contentRef.current, {
         opacity: 0,
@@ -60,7 +62,7 @@ export default function RegionExplorer() {
         <span className="eyebrow">India, Loom by Loom</span>
         <h2 className="stitched">Choose a State, See Its Silk</h2>
         <p>
-          Every region ties, dyes, and weaves in its own dialect. Select a state to dynamically change the atelier backdrop and inspect master photography matching that region's sacred weave.
+          Every region ties, dyes, and weaves in its own dialect. Select a state to explore signature techniques and inspect master photography matching that region's sacred weave.
         </p>
       </div>
 
@@ -87,52 +89,74 @@ export default function RegionExplorer() {
         ))}
       </div>
 
-      <div className="region-panel reveal" id="regionPanel">
-        {photoAsset ? (
-          <img 
-            src={photoAsset} 
-            alt={activeRegion.name} 
-            className="region-panel-bg" 
-            style={{ objectFit: 'cover' }}
-          />
-        ) : (
-          <div className="region-panel-bg" dangerouslySetInnerHTML={{ __html: svgStr }}></div>
-        )}
-        <div className="region-panel-veil"></div>
+      {/* 2-Column Split Panel Layout */}
+      <div className="lux-glass-panel reveal" style={{ maxWidth: '1180px', margin: '0 auto', padding: '0', borderRadius: '8px', overflow: 'hidden' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', minHeight: '480px' }}>
+          
+          {/* Left Column: Details & Weaves List */}
+          <div ref={contentRef} style={{ padding: '48px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <span className="eyebrow">{activeRegion.ic} {activeRegion.name} Heritage Guild</span>
+            <h3 style={{ fontFamily: 'var(--font-royal)', fontSize: 'clamp(2.2rem, 4vw, 3.4rem)', color: 'var(--gold-bright)', margin: '8px 0 12px' }}>
+              {activeRegion.name}
+            </h3>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', color: 'var(--ivory)', fontStyle: 'italic', marginBottom: '20px' }}>
+              Signature Technique: {activeRegion.sig}
+            </div>
+            
+            <div style={{ fontSize: '0.78rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--gold-light)', marginBottom: '16px', fontWeight: 600 }}>
+              ✦ {activeRegion.sarees.length} registered weaves in this state archive
+            </div>
 
-        <div className="region-panel-content" ref={contentRef}>
-          <span className="eyebrow">{activeRegion.ic} {activeRegion.name} Archive</span>
-          <h3>{activeRegion.name}</h3>
-          <div className="region-signature">Signature Technique: {activeRegion.sig}</div>
-          <div className="region-count">
-            ✦ {activeRegion.sarees.length} registered weaves in this state archive
+            <div className="region-saree-list" ref={listRef}>
+              {activeRegion.sarees.map(saree => (
+                <span 
+                  key={saree} 
+                  className="region-chip"
+                  onClick={() => {
+                    playSound('shuttle');
+                    showToast(`Viewing "${saree}" from ${activeRegion.name}`);
+                    openModal({
+                      n: activeRegion.id.toUpperCase(),
+                      name: saree,
+                      desc: `Traditional handwoven ${saree} from ${activeRegion.name}, featuring ${activeRegion.sig} craftsmanship.`,
+                      c1: activeRegion.c1,
+                      c2: activeRegion.c2,
+                      pat: activeRegion.pat
+                    });
+                  }}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {saree}
+                </span>
+              ))}
+            </div>
           </div>
-          <div className="region-saree-list" ref={listRef}>
-            {activeRegion.sarees.map(saree => (
-              <span 
-                key={saree} 
-                className="region-chip"
-                onClick={() => {
-                  showToast(`Viewing "${saree}" from ${activeRegion.name}`);
-                  openModal({
-                    n: activeRegion.id.toUpperCase(),
-                    name: saree,
-                    desc: `Traditional handwoven ${saree} from ${activeRegion.name}, featuring ${activeRegion.sig} craftsmanship.`,
-                    c1: activeRegion.c1,
-                    c2: activeRegion.c2,
-                    pat: activeRegion.pat
-                  });
-                }}
-                style={{ cursor: 'pointer' }}
-              >
-                {saree}
+
+          {/* Right Column: 3D Photo Viewport */}
+          <div style={{ position: 'relative', width: '100%', minHeight: '380px', overflow: 'hidden', background: '#0e0607' }}>
+            {photoAsset ? (
+              <img 
+                src={photoAsset} 
+                alt={activeRegion.name} 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            ) : (
+              <div style={{ width: '100%', height: '100%' }} dangerouslySetInnerHTML={{ __html: svgStr }} />
+            )}
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(14,7,7,0.85) 0%, transparent 40%, rgba(14,7,7,0.4) 100%)' }} />
+
+            <div style={{ position: 'absolute', bottom: '20px', right: '20px', background: 'rgba(14,7,7,0.85)', backdropFilter: 'blur(10px)', border: '1px solid var(--gold)', padding: '10px 18px', borderRadius: '4px' }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--gold-bright)', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 600 }}>
+                {activeRegion.name} Silk Archive
               </span>
-            ))}
+            </div>
           </div>
+
         </div>
       </div>
     </section>
   );
 }
+
 
 

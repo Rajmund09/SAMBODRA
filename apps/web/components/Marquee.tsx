@@ -1,15 +1,26 @@
 import React from 'react';
 
 export default function Marquee() {
-  const items = ['Sambalpuri', 'Ikat', 'Handloom', 'Bandha', 'Kanjivaram', 'Banarasi', 'Paithani', 'Patola'];
-  // We duplicate it to ensure smooth scrolling
-  const allItems = [...items, ...items];
+  const items = [
+    'Sambalpuri Ikat',
+    'Handloom Heritage',
+    'Bandha Double Ikat',
+    'Kanjivaram Temple Silk',
+    'Banarasi Brocade Jaal',
+    'Paithani Peacock',
+    'Patan Patola',
+    'Jamdani Muslin'
+  ];
+  
+  const allItems = [...items, ...items, ...items];
   
   return (
-    <div className="marquee-wrap">
-      <div className="marquee">
+    <div className="marquee-bar">
+      <div className="marquee-track">
         {allItems.map((item, idx) => (
-          <span key={idx}>{item}</span>
+          <div className="marquee-item" key={idx}>
+            <span>{item}</span>
+          </div>
         ))}
       </div>
     </div>

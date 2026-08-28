@@ -57,7 +57,7 @@ export default function Weaves() {
 function SwatchCard({ weave, badge, onClick }: { weave: any; badge: string; onClick: () => void }) {
   const [svgStr, setSvgStr] = useState('');
   const [showPattern, setShowPattern] = useState(false);
-  const { addToAtelier, isInAtelier, removeFromAtelier } = useModal();
+  const { addToAtelier, isInAtelier, removeFromAtelier, addToCompare, isInCompare, removeFromCompare, playSound } = useModal();
 
   const sareeData = getSareeByName(weave.name);
   const photoUrl = sareeData?.productImages?.closeUp?.url || sareeData?.productImages?.flat?.url || sareeData?.modelImages?.fullDrape?.url;
@@ -67,6 +67,7 @@ function SwatchCard({ weave, badge, onClick }: { weave: any; badge: string; onCl
   }, [weave]);
 
   const saved = isInAtelier(weave.n);
+  const inCompare = isInCompare(weave.n);
 
   return (
     <div className="swatch reveal" onClick={onClick}>
@@ -87,10 +88,11 @@ function SwatchCard({ weave, badge, onClick }: { weave: any; badge: string; onCl
       <div className="swatch-label">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
           <span className="num">{weave.n}</span>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '6px' }}>
             <button 
               onClick={(e) => {
                 e.stopPropagation();
+                playSound('click');
                 setShowPattern(!showPattern);
               }}
               style={{
@@ -107,6 +109,28 @@ function SwatchCard({ weave, badge, onClick }: { weave: any; badge: string; onCl
               title="Toggle Photo / Vector View"
             >
               {showPattern ? 'Photo 📸' : 'Vector 📐'}
+            </button>
+
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                if (inCompare) removeFromCompare(weave.n);
+                else addToCompare(weave);
+              }}
+              style={{
+                background: inCompare ? 'var(--gold-dark)' : 'rgba(255,255,255,0.15)',
+                border: '1px solid var(--gold)',
+                color: 'var(--gold-bright)',
+                borderRadius: '12px',
+                padding: '2px 8px',
+                cursor: 'pointer',
+                fontSize: '0.65rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em'
+              }}
+              title={inCompare ? 'Remove from Compare' : 'Add to Compare'}
+            >
+              {inCompare ? '✓ Compare' : '+ Compare'}
             </button>
 
             <button 
@@ -140,5 +164,6 @@ function SwatchCard({ weave, badge, onClick }: { weave: any; badge: string; onCl
     </div>
   );
 }
+
 
 
