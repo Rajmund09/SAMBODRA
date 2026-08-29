@@ -9,21 +9,21 @@ const ARTICLES = [
     title: 'The Hands of Bargarh: 40 Years at the Pit Loom',
     excerpt: 'Master Weaver Narottam Meher reflects on four decades of calculation, memory, and the rhythm of the wooden shuttle.',
     readTime: '6 min read',
-    img: SAREE_IMAGES[0]?.modelImages?.portrait?.url
+    img: SAREE_IMAGES[0]?.productImages?.closeUp?.url
   },
   {
     tag: 'Haute Couture',
     title: 'The Palloo Unfolded: Architectural Pleating in Royal Silk',
     excerpt: 'How contemporary Indian designers are re-imagining the dramatic weight and fall of traditional Bandha borders for global red carpets.',
     readTime: '4 min read',
-    img: SAREE_IMAGES[1]?.modelImages?.fullDrape?.url
+    img: SAREE_IMAGES[1]?.productImages?.border?.url
   },
   {
     tag: 'Dyeing Secrets',
     title: 'Alchemy of Madder & Indigo: Extracting Sacred Hues',
     excerpt: 'Steeped in copper cauldrons over woodfires, natural plant extracts give Sambalpuri Ikat its luminous depth.',
     readTime: '5 min read',
-    img: SAREE_IMAGES[2]?.modelImages?.editorial?.url
+    img: SAREE_IMAGES[2]?.productImages?.palloo?.url
   }
 ];
 

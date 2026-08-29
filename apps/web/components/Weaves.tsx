@@ -60,7 +60,7 @@ function SwatchCard({ weave, badge, onClick }: { weave: any; badge: string; onCl
   const { addToAtelier, isInAtelier, removeFromAtelier, addToCompare, isInCompare, removeFromCompare, playSound } = useModal();
 
   const sareeData = getSareeByName(weave.name);
-  const photoUrl = sareeData?.productImages?.closeUp?.url || sareeData?.productImages?.flat?.url || sareeData?.modelImages?.fullDrape?.url;
+  const photoUrl = sareeData?.productImages?.closeUp?.url || sareeData?.productImages?.flat?.url || sareeData?.productImages?.border?.url;
 
   useEffect(() => {
     setSvgStr(patternSVG(weave.pat, weave.c1, weave.c2));
