@@ -20,7 +20,7 @@ const TIMELINE_EVENTS = [
   },
   {
     year: 'Present Day',
-    title: 'The House of BANDHA Atelier',
+    title: 'The House of SAMBODRA Atelier',
     desc: 'Uniting 214 master artisan families across 22 states, preserving heirloom purity, 100% organic dyes, and certified gold zari.'
   }
 ];

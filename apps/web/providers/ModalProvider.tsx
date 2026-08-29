@@ -62,7 +62,7 @@ const ModalContext = createContext<ModalContextType | undefined>(undefined);
 export function ModalProvider({ children }: { children: React.ReactNode }) {
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [modalData, setModalData] = useState<WeaveItem | null>(null);
-  const [activeTab, setActiveTab] = useState<'drape' | 'flat' | 'closeUp' | 'border' | 'palloo' | 'svg'>('drape');
+  const [activeTab, setActiveTab] = useState<'drape' | 'flat' | 'closeUp' | 'border' | 'palloo' | 'svg'>('closeUp');
   
   // Atelier Wishlist
   const [atelierItems, setAtelierItems] = useState<WeaveItem[]>([]);
@@ -176,7 +176,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
       }
     }
     setModalData(enrichedData);
-    setActiveTab('drape');
+    setActiveTab('closeUp');
   };
 
   const closeModal = () => setModalData(null);
@@ -332,7 +332,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
                   </>
                 )}
                 <div className="modal-watermark">
-                  {meta ? `${meta.state} · ${meta.region}` : 'BANDHA HAUTE COUTURE'}
+                  {meta ? `${meta.state} · ${meta.region}` : 'SAMBODRA HAUTE COUTURE'}
                 </div>
               </div>
 

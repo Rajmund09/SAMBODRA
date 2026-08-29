@@ -22,11 +22,11 @@ export default function Footer() {
                 </linearGradient>
               </defs>
             </svg>
-            <span>BANDHA</span>
+            <span>SAMBODRA</span>
           </a>
 
           <p style={{ color: 'var(--ivory-dim)', fontSize: '0.9rem', lineHeight: 1.6, maxWidth: '420px', margin: '16px 0 24px' }}>
-            The House of BANDHA — A luxury haute couture handloom atelier celebrating the Odia art of Bandha Ikat, GI-certified silks, and 214 master artisan families across India.
+            The House of SAMBODRA — A luxury haute couture handloom atelier celebrating the Odia art of Bandha Ikat, GI-certified silks, and 214 master artisan families across India.
           </p>
           
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '20px' }}>
@@ -98,7 +98,7 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <span>&copy; 2026 BANDHA Haute Couture Handlooms. Every thread, tied by hand.</span>
+        <span>&copy; 2026 SAMBODRA Haute Couture Handlooms. Every thread, tied by hand.</span>
         <span>Geographical Indication (GI) & Handloom Mark Certified</span>
       </div>
     </footer>

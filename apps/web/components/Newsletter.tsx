@@ -10,7 +10,7 @@ export default function Newsletter() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email) return;
-    showToast('Welcome to the House of BANDHA Atelier VIP Circle.');
+    showToast('Welcome to the House of SAMBODRA Atelier VIP Circle.');
     setEmail('');
   };
 
