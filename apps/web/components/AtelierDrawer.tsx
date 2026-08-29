@@ -34,7 +34,7 @@ export default function AtelierDrawer() {
         ) : (
           atelierItems.map(item => {
             const sareeData = getSareeByName(item.name);
-            const photoUrl = sareeData?.productImages?.closeUp?.url || sareeData?.productImages?.flat?.url || sareeData?.modelImages?.fullDrape?.url;
+            const photoUrl = sareeData?.productImages?.closeUp?.url || sareeData?.productImages?.flat?.url || sareeData?.productImages?.border?.url;
 
             return (
               <div key={item.n} className="atelier-item">

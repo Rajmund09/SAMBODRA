@@ -20,7 +20,7 @@ export default function RegionExplorer() {
 
   const matchedSarees = getSareesByState(activeRegion.name);
   const photoAsset = matchedSarees[0]?.productImages?.closeUp?.url || 
-                    matchedSarees[0]?.modelImages?.fullDrape?.url || 
+                    matchedSarees[0]?.productImages?.flat?.url || 
                     SAREE_IMAGES[0]?.productImages?.closeUp?.url;
 
   const filteredStates = STATES.filter(s =>
