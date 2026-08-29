@@ -3,9 +3,9 @@ import { ModalProvider } from "../providers/ModalProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BANDHA — The House of Handwoven Heritage & Royal Silks",
+  title: "SAMBODRA — The House of Handwoven Heritage & Royal Silks",
   description: "A luxury haute couture handloom atelier celebrating the Odia art of Bandha Ikat and India's legendary master weavers.",
-  keywords: ["Bandha Ikat", "Sambalpuri Silk", "Banarasi Brocade", "Kanjivaram", "Indian Handloom", "Luxury Sarees", "Haute Couture"],
+  keywords: ["SAMBODRA", "Bandha Ikat", "Sambalpuri Silk", "Banarasi Brocade", "Kanjivaram", "Indian Handloom", "Luxury Sarees", "Haute Couture"],
 };
 
 export default function RootLayout({

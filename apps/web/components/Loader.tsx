@@ -70,7 +70,7 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
           id="loomText" 
           ref={textRef}
         >
-          BANDHA
+          SAMBODRA
         </text>
       </svg>
       <div className="loom-caption">Tying the first thread</div>
