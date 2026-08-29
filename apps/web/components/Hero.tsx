@@ -10,7 +10,7 @@ export default function Hero({ animateIn }: { animateIn: boolean }) {
   const innerRef = useRef<HTMLDivElement>(null);
   const { setIsSearchOpen } = useModal();
 
-  const heroImage = SAREE_IMAGES[0]?.modelImages?.fullDrape?.url;
+  const heroImage = SAREE_IMAGES[0]?.productImages?.closeUp?.url || SAREE_IMAGES[0]?.productImages?.flat?.url;
 
   useEffect(() => {
     if (!animateIn) return;
@@ -85,9 +85,9 @@ export default function Hero({ animateIn }: { animateIn: boolean }) {
 
       <div ref={innerRef} className="hero-inner" style={{ visibility: animateIn ? 'visible' : 'hidden' }}>
         <span className="eyebrow">House of Royal Ikat · Sambalpuri & Master Handlooms</span>
-        <h1 className="stitched">BANDHA</h1>
+        <h1 className="stitched">SAMBODRA</h1>
         <p className="sub">
-          Every thread is tied before it is dyed, dyed before it is woven, and woven before it is worn — the eternal bond that gives Bandha its royal name.
+          Every thread is tied before it is dyed, dyed before it is woven, and woven before it is worn — the eternal bond that gives SAMBODRA its royal name.
         </p>
         <div className="hero-actions">
           <a href="#weaves" className="hero-cta">

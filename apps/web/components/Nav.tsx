@@ -52,7 +52,7 @@ export default function Nav() {
               </linearGradient>
             </defs>
           </svg>
-          <span>BANDHA</span>
+          <span>SAMBODRA</span>
         </a>
 
 
