@@ -1,0 +1,251 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * SAMBODRA luxury design system.
+ * Charcoal / midnight / maroon base with gold, rose-gold and antique silver metallics.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-rose-gold: var(--rose-gold);
+  --color-silver: var(--silver);
+  --color-charcoal: var(--charcoal);
+  --color-midnight: var(--midnight);
+  --color-maroon: var(--maroon);
+  --color-ivory: var(--ivory);
+
+  --font-display: "Cinzel", "Playfair Display", serif;
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+
+  --color-chart-1: var(--gold);
+  --color-chart-2: var(--rose-gold);
+  --color-chart-3: var(--silver);
+  --color-chart-4: var(--maroon);
+  --color-chart-5: var(--midnight);
+  --color-sidebar: var(--card);
+  --color-sidebar-foreground: var(--foreground);
+  --color-sidebar-primary: var(--primary);
+  --color-sidebar-primary-foreground: var(--primary-foreground);
+  --color-sidebar-accent: var(--accent);
+  --color-sidebar-accent-foreground: var(--accent-foreground);
+  --color-sidebar-border: var(--border);
+  --color-sidebar-ring: var(--ring);
+}
+
+:root {
+  --radius: 0.125rem;
+
+  --charcoal: oklch(0.17 0.008 60);
+  --midnight: oklch(0.22 0.055 265);
+  --maroon: oklch(0.29 0.108 18);
+  --gold: oklch(0.76 0.126 85.5); /* #D4AF37 */
+  --gold-soft: oklch(0.87 0.076 88);
+  --rose-gold: oklch(0.66 0.084 20); /* #B76E79 */
+  --silver: oklch(0.79 0.008 250);
+  --ivory: oklch(0.96 0.012 85);
+
+  --background: oklch(0.14 0.006 60);
+  --foreground: oklch(0.94 0.012 85);
+  --card: oklch(0.19 0.01 55);
+  --card-foreground: oklch(0.94 0.012 85);
+  --popover: oklch(0.17 0.01 55);
+  --popover-foreground: oklch(0.94 0.012 85);
+  --primary: var(--gold);
+  --primary-foreground: oklch(0.16 0.008 60);
+  --secondary: oklch(0.24 0.02 40);
+  --secondary-foreground: oklch(0.94 0.012 85);
+  --muted: oklch(0.23 0.012 55);
+  --muted-foreground: oklch(0.72 0.014 70);
+  --accent: var(--maroon);
+  --accent-foreground: oklch(0.95 0.012 85);
+  --destructive: oklch(0.55 0.19 25);
+  --destructive-foreground: oklch(0.96 0.01 85);
+  --border: oklch(0.76 0.126 85.5 / 18%);
+  --input: oklch(0.76 0.126 85.5 / 22%);
+  --ring: oklch(0.76 0.126 85.5 / 55%);
+
+  --gradient-gold: linear-gradient(
+    100deg,
+    oklch(0.62 0.09 78),
+    oklch(0.9 0.09 92),
+    oklch(0.76 0.126 85.5),
+    oklch(0.66 0.084 20)
+  );
+  --gradient-royal: radial-gradient(
+    120% 100% at 50% 0%,
+    oklch(0.29 0.108 18 / 55%),
+    oklch(0.14 0.006 60) 65%
+  );
+  --shadow-glow: 0 0 0 1px oklch(0.76 0.126 85.5 / 30%),
+    0 18px 60px -18px oklch(0.76 0.126 85.5 / 45%);
+  --ease-silk: cubic-bezier(0.43, 0.13, 0.23, 0.96);
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+  }
+
+  ::selection {
+    background: oklch(0.76 0.126 85.5 / 30%);
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--charcoal);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: oklch(0.76 0.126 85.5 / 40%);
+  }
+}
+
+@utility text-gold-gradient {
+  background: var(--gradient-gold);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility glass-panel {
+  background: color-mix(in oklab, var(--charcoal) 62%, transparent);
+  backdrop-filter: blur(22px) saturate(140%);
+  border: 1px solid oklch(0.76 0.126 85.5 / 16%);
+}
+
+@utility hairline {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    oklch(0.76 0.126 85.5 / 60%),
+    transparent
+  );
+}
+
+@utility tracking-luxe {
+  letter-spacing: 0.32em;
+}
+
+@utility silk-sheen {
+  position: relative;
+  overflow: hidden;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      110deg,
+      transparent 35%,
+      oklch(0.95 0.05 90 / 22%) 50%,
+      transparent 65%
+    );
+    transform: translateX(-120%);
+    transition: transform 1.1s var(--ease-silk);
+  }
+  &:hover::after {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(3deg);
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer-line {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+@utility animate-float-slow {
+  animation: float-slow 9s var(--ease-silk) infinite;
+}
+
+@utility animate-spin-slow {
+  animation: spin-slow 18s linear infinite;
+}
+
+@utility animate-shimmer-line {
+  animation: shimmer-line 3.4s ease-in-out infinite;
+}
+
+@media (max-width: 900px) {
+  .cursor-luxe {
+    display: none;
+  }
+}
