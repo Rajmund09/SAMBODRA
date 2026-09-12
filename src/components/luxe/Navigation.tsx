@@ -6,6 +6,8 @@ import { STATES } from "@/data/states";
 import { MagneticButton } from "./MagneticButton";
 import { cn } from "@/lib/utils";
 import GlassSurface from "@/components/effects/GlassSurface";
+import { scrollToId } from "@/lib/scroll";
+import { useBoutique } from "@/store/useBoutique";
 
 const COLLECTIONS = [
   { title: "Bridal Vault", note: "Ceremonial silks, kadhwa zari" },
@@ -17,6 +19,16 @@ const COLLECTIONS = [
 export function Navigation() {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState<string | null>(null);
+  const { setIsBookingOpen } = useBoutique();
+
+  const handleNavClick = (e: React.MouseEvent, key: string) => {
+    if (key === "collections" || key === "states") {
+      e.preventDefault();
+      scrollToId(`#${key}`);
+    } else {
+      // Allow normal link navigation for other items
+    }
+  };
   const [mobile, setMobile] = useState(false);
   const { scrollY } = useScroll();
 
@@ -74,15 +86,18 @@ export function Navigation() {
             { label: "Collections", key: "collections" },
             { label: "States", key: "states" },
           ].map((item) => (
-            <li key={item.key} onMouseEnter={() => setOpen(item.key)}>
-              <button
+            <li key={item.key} className="relative">
+              <a
+                href={item.key === "collections" || item.key === "states" ? `#${item.key}` : `/${item.key}`}
+                onClick={(e) => handleNavClick(e, item.key)}
+                onMouseEnter={() => setOpen(item.key)}
                 className={cn(
-                  "font-sans text-[0.68rem] uppercase tracking-luxe transition-colors duration-500",
-                  open === item.key ? "text-gold" : "text-ivory/75 hover:text-gold",
+                  "font-sans text-[0.65rem] uppercase tracking-luxe transition-colors duration-500",
+                  open === item.key ? "text-gold" : "text-ivory/80 hover:text-gold"
                 )}
               >
                 {item.label}
-              </button>
+              </a>
             </li>
           ))}
           {["Heritage", "Artisans", "Atelier"].map((l) => (
@@ -98,7 +113,7 @@ export function Navigation() {
         </ul>
 
         <div className="hidden lg:block">
-          <MagneticButton variant="outline" className="px-6 py-3">
+          <MagneticButton variant="outline" className="px-6 py-3" onClick={() => setIsBookingOpen(true)}>
             Book a Viewing
           </MagneticButton>
         </div>
@@ -192,7 +207,7 @@ export function Navigation() {
               ))}
             </ul>
             <div className="mt-14">
-              <MagneticButton>Book a Viewing</MagneticButton>
+              <MagneticButton onClick={() => setIsBookingOpen(true)}>Book a Viewing</MagneticButton>
             </div>
           </motion.div>
         )}

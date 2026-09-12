@@ -99,8 +99,8 @@ export function ArtisanSection() {
             ))}
           </div>
 
-          <div className="mt-12">
-            <MagneticButton variant="outline">Meet the weavers</MagneticButton>
+          <div className="mt-14 text-center md:text-left">
+            <MagneticButton href="/weavers" variant="outline">Meet the weavers</MagneticButton>
           </div>
         </div>
       </div>

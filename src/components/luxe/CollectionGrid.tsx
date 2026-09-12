@@ -6,6 +6,7 @@ import { useBoutique } from "@/store/useBoutique";
 import { SectionHeading } from "./SectionHeading";
 import { MagneticButton } from "./MagneticButton";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export function CollectionGrid() {
   const { quickView, setQuickView, wishlist, toggleWishlist } = useBoutique();
@@ -132,8 +133,27 @@ export function CollectionGrid() {
                 </dl>
                 <p className="mt-8 font-display text-2xl text-gold-gradient">{piece.price}</p>
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <MagneticButton>Reserve this piece</MagneticButton>
-                  <MagneticButton variant="outline" onClick={() => toggleWishlist(piece.id)}>
+                  <MagneticButton
+                    onClick={() => {
+                      toast.success(`Reserved: ${piece.name}`, {
+                        description: "An artisan consultant will contact you shortly to complete the reservation.",
+                      });
+                    }}
+                  >
+                    Reserve this piece
+                  </MagneticButton>
+                  <MagneticButton 
+                    variant="outline" 
+                    onClick={() => {
+                      const wishlisted = wishlist.includes(piece.id);
+                      toggleWishlist(piece.id);
+                      if (!wishlisted) {
+                        toast("Added to Wishlist", {
+                          description: `${piece.name} has been saved to your private collection.`,
+                        });
+                      }
+                    }}
+                  >
                     {wishlist.includes(piece.id) ? "Saved" : "Save"}
                   </MagneticButton>
                 </div>

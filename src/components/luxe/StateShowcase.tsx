@@ -139,7 +139,7 @@ export function StateShowcase() {
                 </p>
 
                 <div className="mt-10 flex flex-wrap items-center gap-4">
-                  <MagneticButton variant="outline" className="px-7 py-3">
+                  <MagneticButton href="#collections" variant="outline" className="px-7 py-3">
                     View {state.name} looms
                   </MagneticButton>
                   <span className="font-sans text-[0.6rem] uppercase tracking-[0.2em] text-ivory/60 drop-shadow">

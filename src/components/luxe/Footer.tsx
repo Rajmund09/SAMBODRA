@@ -6,6 +6,9 @@ import { PIECES } from "@/data/collection";
 import { MagneticButton } from "./MagneticButton";
 import { Motif } from "./Motif";
 import { cn } from "@/lib/utils";
+import { useBoutique } from "@/store/useBoutique";
+import { scrollToId } from "@/lib/scroll";
+import { Link } from "@tanstack/react-router";
 
 const LINKS = [
   {
@@ -19,6 +22,17 @@ const LINKS = [
 export function Footer() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
+  const { setIsBookingOpen } = useBoutique();
+
+  const handleLinkClick = (e: React.MouseEvent, item: string) => {
+    if (item === "Book a viewing") {
+      e.preventDefault();
+      setIsBookingOpen(true);
+    } else if (item === "Heritage") {
+      e.preventDefault();
+      scrollToId("#heritage");
+    }
+  };
 
   return (
     <footer id="atelier" className="relative overflow-hidden border-t border-gold/15 pt-24">
@@ -78,7 +92,8 @@ export function Footer() {
                   {col.items.map((item) => (
                     <li key={item}>
                       <a
-                        href="#top"
+                        href={item === "Book a viewing" ? "#book" : item === "Heritage" ? "#heritage" : item === "Journal" ? "/journal" : item === "Weaver register" ? "/weavers" : "#"}
+                        onClick={(e) => handleLinkClick(e, item)}
                         className="font-sans text-sm text-ivory/70 transition-colors duration-500 hover:text-gold"
                         data-cursor="hover"
                       >
@@ -135,7 +150,7 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col items-center gap-6 pb-10">
-          <MagneticButton>Book a private viewing</MagneticButton>
+          <MagneticButton onClick={() => setIsBookingOpen(true)}>Book a private viewing</MagneticButton>
           <p className="font-sans text-[0.6rem] uppercase tracking-[0.24em] text-muted-foreground">
             © {new Date().getFullYear()} Sambodra · Handwoven in India
           </p>
