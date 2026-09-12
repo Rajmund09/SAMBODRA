@@ -21,6 +21,8 @@ import { Route as RosetteBandRouteImport } from './routes/rosette-band'
 import { Route as TulipBandRouteImport } from './routes/tulip-band'
 import { Route as VineBandRouteImport } from './routes/vine-band'
 import { Route as WeaversRouteImport } from './routes/weavers'
+import { Route as CollectionCollectionIdRouteImport } from './routes/collection.$collectionId'
+import { Route as StateStateIdRouteImport } from './routes/state.$stateId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -82,6 +84,16 @@ const WeaversRoute = WeaversRouteImport.update({
   path: '/weavers',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CollectionCollectionIdRoute = CollectionCollectionIdRouteImport.update({
+  id: '/collection/$collectionId',
+  path: '/collection/$collectionId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StateStateIdRoute = StateStateIdRouteImport.update({
+  id: '/state/$stateId',
+  path: '/state/$stateId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -96,6 +108,8 @@ export interface FileRoutesByFullPath {
   '/tulip-band': typeof TulipBandRoute
   '/vine-band': typeof VineBandRoute
   '/weavers': typeof WeaversRoute
+  '/collection/$collectionId': typeof CollectionCollectionIdRoute
+  '/state/$stateId': typeof StateStateIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -110,6 +124,8 @@ export interface FileRoutesByTo {
   '/tulip-band': typeof TulipBandRoute
   '/vine-band': typeof VineBandRoute
   '/weavers': typeof WeaversRoute
+  '/collection/$collectionId': typeof CollectionCollectionIdRoute
+  '/state/$stateId': typeof StateStateIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -125,6 +141,8 @@ export interface FileRoutesById {
   '/tulip-band': typeof TulipBandRoute
   '/vine-band': typeof VineBandRoute
   '/weavers': typeof WeaversRoute
+  '/collection/$collectionId': typeof CollectionCollectionIdRoute
+  '/state/$stateId': typeof StateStateIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -141,6 +159,8 @@ export interface FileRouteTypes {
     | '/tulip-band'
     | '/vine-band'
     | '/weavers'
+    | '/collection/$collectionId'
+    | '/state/$stateId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -155,6 +175,8 @@ export interface FileRouteTypes {
     | '/tulip-band'
     | '/vine-band'
     | '/weavers'
+    | '/collection/$collectionId'
+    | '/state/$stateId'
   id:
     | '__root__'
     | '/'
@@ -169,6 +191,8 @@ export interface FileRouteTypes {
     | '/tulip-band'
     | '/vine-band'
     | '/weavers'
+    | '/collection/$collectionId'
+    | '/state/$stateId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -184,6 +208,8 @@ export interface RootRouteChildren {
   TulipBandRoute: typeof TulipBandRoute
   VineBandRoute: typeof VineBandRoute
   WeaversRoute: typeof WeaversRoute
+  CollectionCollectionIdRoute: typeof CollectionCollectionIdRoute
+  StateStateIdRoute: typeof StateStateIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -272,6 +298,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WeaversRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/collection/$collectionId': {
+      id: '/collection/$collectionId'
+      path: '/collection/$collectionId'
+      fullPath: '/collection/$collectionId'
+      preLoaderRoute: typeof CollectionCollectionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/state/$stateId': {
+      id: '/state/$stateId'
+      path: '/state/$stateId'
+      fullPath: '/state/$stateId'
+      preLoaderRoute: typeof StateStateIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -288,6 +328,8 @@ const rootRouteChildren: RootRouteChildren = {
   TulipBandRoute: TulipBandRoute,
   VineBandRoute: VineBandRoute,
   WeaversRoute: WeaversRoute,
+  CollectionCollectionIdRoute: CollectionCollectionIdRoute,
+  StateStateIdRoute: StateStateIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

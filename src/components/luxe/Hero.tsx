@@ -69,7 +69,7 @@ export function Hero() {
           Est. Handloom Atelier · India
         </motion.p>
 
-        <h1 className="mt-8 flex flex-wrap justify-center font-display text-[15vw] leading-[0.95] tracking-[0.06em] md:text-[9.5vw] lg:text-[8rem]">
+        <h1 className="mt-8 flex justify-center font-display text-[12.5vw] leading-[0.95] tracking-[0.06em] md:text-[9.5vw] lg:text-[8rem]">
           {TITLE.split("").map((c, i) => (
             <motion.span
               key={i}

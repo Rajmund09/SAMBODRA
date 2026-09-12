@@ -149,8 +149,8 @@ export function Navigation() {
               </div>
               <div className="grid gap-x-10 gap-y-6 sm:grid-cols-2 xl:grid-cols-3">
                 {(open === "collections"
-                  ? COLLECTIONS.map((c) => ({ title: c.title, note: c.note, href: "#collections" }))
-                  : STATES.map((s) => ({ title: s.name, note: s.weave, href: "#states" }))
+                  ? COLLECTIONS.map((c) => ({ title: c.title, note: c.note, href: `/collection/${c.title.toLowerCase().replace(/ /g, '-')}` }))
+                  : STATES.map((s) => ({ title: s.name, note: s.weave, href: `/state/${s.name.toLowerCase().replace(/ /g, '-')}` }))
                 ).map((item) => (
                   <a
                     key={item.title}

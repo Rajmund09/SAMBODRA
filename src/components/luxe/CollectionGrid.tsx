@@ -21,7 +21,7 @@ export function CollectionGrid() {
           copy="Each saree is registered, numbered and released only once its weaver signs the selvedge. No restocks, no reruns."
         />
 
-        <div className="mt-16 grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-16 flex flex-col gap-8 md:grid md:gap-8 md:grid-cols-2 xl:grid-cols-4 relative pb-20 md:pb-0">
           {PIECES.map((p, i) => {
             const loved = wishlist.includes(p.id);
             return (
@@ -32,10 +32,10 @@ export function CollectionGrid() {
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, margin: "-80px" }}
-                className="group relative"
+                className="group relative sticky top-32 md:static md:top-auto h-[75vh] md:h-auto mb-10 md:mb-0 shadow-2xl md:shadow-none bg-charcoal md:bg-transparent rounded-sm overflow-hidden md:overflow-visible"
                 data-cursor="hover"
               >
-                <div className="relative aspect-[3/4] overflow-hidden rounded-sm">
+                <div className="relative h-[60%] md:h-auto md:aspect-[3/4] overflow-hidden rounded-t-sm md:rounded-sm">
                   <img
                     src={p.image}
                     alt={`${p.name} — ${p.weave} saree from ${p.origin}`}
@@ -67,13 +67,13 @@ export function CollectionGrid() {
                   </div>
                 </div>
 
-                <div className="mt-5 space-y-1.5">
-                  <p className="font-sans text-[0.58rem] uppercase tracking-luxe text-gold/70">
-                    {p.house} · {p.edition}
+                <div className="mt-6 space-y-2 p-5 md:p-0">
+                  <p className="font-sans text-[0.6rem] uppercase tracking-[0.2em] text-gold/80">
+                    {p.house} <span className="opacity-50">·</span> {p.edition}
                   </p>
-                  <h3 className="font-serif text-xl text-ivory">{p.name}</h3>
-                  <p className="font-sans text-xs text-muted-foreground">{p.weave}</p>
-                  <p className="pt-1 font-sans text-sm text-gold-gradient">{p.price}</p>
+                  <h3 className="font-serif text-2xl text-ivory tracking-wide">{p.name}</h3>
+                  <p className="font-sans text-[0.7rem] uppercase tracking-widest text-muted-foreground">{p.weave}</p>
+                  <p className="pt-2 font-display text-lg tracking-wide text-gold-gradient">{p.price}</p>
                 </div>
               </motion.article>
             );

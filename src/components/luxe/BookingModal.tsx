@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { EASE_SILK } from "@/lib/luxe";
 import { MagneticButton } from "./MagneticButton";
 import { useEffect } from "react";
-import GlassSurface from "@/components/effects/GlassSurface";
+import { toast } from "sonner";
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -42,23 +42,9 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
             initial={{ scale: 0.95, y: 20, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.95, y: 20, opacity: 0 }}
-            transition={{ duration: 0.7, ease: EASE_SILK, delay: 0.1 }}
-            className="relative w-full max-w-lg overflow-hidden rounded-sm"
+            transition={{ duration: 0.4, ease: EASE_SILK, delay: 0.1 }}
+            className="relative w-full max-w-lg overflow-hidden rounded-md bg-charcoal/85 backdrop-blur-3xl border border-gold/15 shadow-2xl"
           >
-            <div className="absolute inset-0 z-[-1]">
-              <GlassSurface
-                width="100%"
-                height="100%"
-                borderRadius={0}
-                borderWidth={1}
-                borderColor="rgba(212,175,55,0.2)"
-                brightness={30}
-                opacity={0.8}
-                blur={20}
-                backgroundOpacity={0.7}
-                className="h-full w-full"
-              />
-            </div>
             
             <div className="relative z-10 p-8 md:p-12">
               <button 
@@ -85,7 +71,9 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
               <form className="space-y-6" onSubmit={(e) => {
                 e.preventDefault();
-                alert("Booking request received. Our concierge will contact you shortly.");
+                toast.success("Private Viewing Requested", {
+                  description: "Our concierge will contact you shortly to coordinate details.",
+                });
                 onClose();
               }}>
                 <div className="space-y-4">
