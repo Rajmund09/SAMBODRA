@@ -1,6 +1,8 @@
 import { useRef, type ReactNode } from "react";
 import { motion, useMotionValue, useSpring } from "motion/react";
+import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
+import { scrollToId } from "@/lib/scroll";
 
 interface MagneticButtonProps {
   children: ReactNode;
@@ -44,7 +46,22 @@ export function MagneticButton({
     ghost: "text-ivory/80 hover:text-gold",
   }[variant];
 
-  const Inner = href ? "a" : "button";
+  const isHash = href?.startsWith("#");
+  const isInternal = href?.startsWith("/") && !isHash;
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (isHash && href) {
+      e.preventDefault();
+      scrollToId(href);
+    }
+    if (onClick) onClick();
+  };
+
+  const buttonClasses = cn(
+    "silk-sheen group relative inline-flex items-center justify-center gap-3 rounded-full px-8 py-4 font-sans text-[0.72rem] uppercase tracking-luxe transition-all duration-700 ease-[cubic-bezier(0.43,0.13,0.23,0.96)] hover:scale-[1.03]",
+    styles,
+    className,
+  );
 
   return (
     <motion.div
@@ -55,17 +72,19 @@ export function MagneticButton({
       className="inline-block"
       data-cursor="hover"
     >
-      <Inner
-        href={href}
-        onClick={onClick}
-        className={cn(
-          "silk-sheen group relative inline-flex items-center justify-center gap-3 rounded-full px-8 py-4 font-sans text-[0.72rem] uppercase tracking-luxe transition-all duration-700 ease-[cubic-bezier(0.43,0.13,0.23,0.96)] hover:scale-[1.03]",
-          styles,
-          className,
-        )}
-      >
-        {children}
-      </Inner>
+      {isInternal ? (
+        <Link to={href} onClick={handleClick} className={buttonClasses}>
+          {children}
+        </Link>
+      ) : href ? (
+        <a href={href} onClick={handleClick} className={buttonClasses}>
+          {children}
+        </a>
+      ) : (
+        <button onClick={handleClick} className={buttonClasses}>
+          {children}
+        </button>
+      )}
     </motion.div>
   );
 }

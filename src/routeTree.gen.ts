@@ -13,11 +13,14 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as FloralBandRouteImport } from './routes/floral-band'
 import { Route as FloralBand2RouteImport } from './routes/floral-band-2'
 import { Route as GeometricBandRouteImport } from './routes/geometric-band'
+import { Route as HeritageRouteImport } from './routes/heritage'
+import { Route as JournalRouteImport } from './routes/journal'
 import { Route as LotusBandRouteImport } from './routes/lotus-band'
 import { Route as PaisleyBandRouteImport } from './routes/paisley-band'
 import { Route as RosetteBandRouteImport } from './routes/rosette-band'
 import { Route as TulipBandRouteImport } from './routes/tulip-band'
 import { Route as VineBandRouteImport } from './routes/vine-band'
+import { Route as WeaversRouteImport } from './routes/weavers'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -37,6 +40,16 @@ const FloralBand2Route = FloralBand2RouteImport.update({
 const GeometricBandRoute = GeometricBandRouteImport.update({
   id: '/geometric-band',
   path: '/geometric-band',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HeritageRoute = HeritageRouteImport.update({
+  id: '/heritage',
+  path: '/heritage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalRoute = JournalRouteImport.update({
+  id: '/journal',
+  path: '/journal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LotusBandRoute = LotusBandRouteImport.update({
@@ -64,28 +77,39 @@ const VineBandRoute = VineBandRouteImport.update({
   path: '/vine-band',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WeaversRoute = WeaversRouteImport.update({
+  id: '/weavers',
+  path: '/weavers',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/floral-band': typeof FloralBandRoute
   '/floral-band-2': typeof FloralBand2Route
   '/geometric-band': typeof GeometricBandRoute
+  '/heritage': typeof HeritageRoute
+  '/journal': typeof JournalRoute
   '/lotus-band': typeof LotusBandRoute
   '/paisley-band': typeof PaisleyBandRoute
   '/rosette-band': typeof RosetteBandRoute
   '/tulip-band': typeof TulipBandRoute
   '/vine-band': typeof VineBandRoute
+  '/weavers': typeof WeaversRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/floral-band': typeof FloralBandRoute
   '/floral-band-2': typeof FloralBand2Route
   '/geometric-band': typeof GeometricBandRoute
+  '/heritage': typeof HeritageRoute
+  '/journal': typeof JournalRoute
   '/lotus-band': typeof LotusBandRoute
   '/paisley-band': typeof PaisleyBandRoute
   '/rosette-band': typeof RosetteBandRoute
   '/tulip-band': typeof TulipBandRoute
   '/vine-band': typeof VineBandRoute
+  '/weavers': typeof WeaversRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -93,11 +117,14 @@ export interface FileRoutesById {
   '/floral-band': typeof FloralBandRoute
   '/floral-band-2': typeof FloralBand2Route
   '/geometric-band': typeof GeometricBandRoute
+  '/heritage': typeof HeritageRoute
+  '/journal': typeof JournalRoute
   '/lotus-band': typeof LotusBandRoute
   '/paisley-band': typeof PaisleyBandRoute
   '/rosette-band': typeof RosetteBandRoute
   '/tulip-band': typeof TulipBandRoute
   '/vine-band': typeof VineBandRoute
+  '/weavers': typeof WeaversRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -106,33 +133,42 @@ export interface FileRouteTypes {
     | '/floral-band'
     | '/floral-band-2'
     | '/geometric-band'
+    | '/heritage'
+    | '/journal'
     | '/lotus-band'
     | '/paisley-band'
     | '/rosette-band'
     | '/tulip-band'
     | '/vine-band'
+    | '/weavers'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/floral-band'
     | '/floral-band-2'
     | '/geometric-band'
+    | '/heritage'
+    | '/journal'
     | '/lotus-band'
     | '/paisley-band'
     | '/rosette-band'
     | '/tulip-band'
     | '/vine-band'
+    | '/weavers'
   id:
     | '__root__'
     | '/'
     | '/floral-band'
     | '/floral-band-2'
     | '/geometric-band'
+    | '/heritage'
+    | '/journal'
     | '/lotus-band'
     | '/paisley-band'
     | '/rosette-band'
     | '/tulip-band'
     | '/vine-band'
+    | '/weavers'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -140,11 +176,14 @@ export interface RootRouteChildren {
   FloralBandRoute: typeof FloralBandRoute
   FloralBand2Route: typeof FloralBand2Route
   GeometricBandRoute: typeof GeometricBandRoute
+  HeritageRoute: typeof HeritageRoute
+  JournalRoute: typeof JournalRoute
   LotusBandRoute: typeof LotusBandRoute
   PaisleyBandRoute: typeof PaisleyBandRoute
   RosetteBandRoute: typeof RosetteBandRoute
   TulipBandRoute: typeof TulipBandRoute
   VineBandRoute: typeof VineBandRoute
+  WeaversRoute: typeof WeaversRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -175,6 +214,20 @@ declare module '@tanstack/react-router' {
       path: '/geometric-band'
       fullPath: '/geometric-band'
       preLoaderRoute: typeof GeometricBandRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/heritage': {
+      id: '/heritage'
+      path: '/heritage'
+      fullPath: '/heritage'
+      preLoaderRoute: typeof HeritageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal': {
+      id: '/journal'
+      path: '/journal'
+      fullPath: '/journal'
+      preLoaderRoute: typeof JournalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lotus-band': {
@@ -212,6 +265,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VineBandRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/weavers': {
+      id: '/weavers'
+      path: '/weavers'
+      fullPath: '/weavers'
+      preLoaderRoute: typeof WeaversRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -220,11 +280,14 @@ const rootRouteChildren: RootRouteChildren = {
   FloralBandRoute: FloralBandRoute,
   FloralBand2Route: FloralBand2Route,
   GeometricBandRoute: GeometricBandRoute,
+  HeritageRoute: HeritageRoute,
+  JournalRoute: JournalRoute,
   LotusBandRoute: LotusBandRoute,
   PaisleyBandRoute: PaisleyBandRoute,
   RosetteBandRoute: RosetteBandRoute,
   TulipBandRoute: TulipBandRoute,
   VineBandRoute: VineBandRoute,
+  WeaversRoute: WeaversRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
