@@ -12,6 +12,9 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import Silk from "../components/effects/Silk";
+import { Toaster } from "@/components/ui/sonner";
+import { BookingModal } from "@/components/luxe/BookingModal";
+import { useBoutique } from "@/store/useBoutique";
 
 function NotFoundComponent() {
   return (
@@ -133,6 +136,28 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      <GlobalModals />
     </QueryClientProvider>
+  );
+}
+
+function GlobalModals() {
+  const { isBookingOpen, setIsBookingOpen } = useBoutique();
+
+  return (
+    <>
+      <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+      <Toaster 
+        theme="dark" 
+        position="bottom-center"
+        toastOptions={{
+          className: "bg-charcoal border border-gold/20 text-ivory font-sans",
+          style: {
+            background: "rgba(10, 10, 10, 0.9)",
+            backdropFilter: "blur(10px)",
+          }
+        }}
+      />
+    </>
   );
 }

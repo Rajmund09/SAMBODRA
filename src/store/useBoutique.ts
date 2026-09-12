@@ -9,6 +9,8 @@ interface BoutiqueState {
   setQuickView: (id: string | null) => void;
   wishlist: string[];
   toggleWishlist: (id: string) => void;
+  isBookingOpen: boolean;
+  setIsBookingOpen: (isOpen: boolean) => void;
 }
 
 export const useBoutique = create<BoutiqueState>((set) => ({
@@ -25,4 +27,6 @@ export const useBoutique = create<BoutiqueState>((set) => ({
         ? s.wishlist.filter((w) => w !== id)
         : [...s.wishlist, id],
     })),
+  isBookingOpen: false,
+  setIsBookingOpen: (isOpen) => set({ isBookingOpen: isOpen }),
 }));
