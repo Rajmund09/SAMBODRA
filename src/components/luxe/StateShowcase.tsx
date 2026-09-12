@@ -18,7 +18,7 @@ export function StateShowcase() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.3, ease: EASE_SILK }}
+          transition={{ duration: 0.6, ease: EASE_SILK }}
           className="absolute inset-0 opacity-40"
           style={{
             background: `radial-gradient(120% 90% at 70% 15%, ${state.palette.from}, ${state.palette.via} 45%, ${state.palette.to} 100%)`,
@@ -32,7 +32,7 @@ export function StateShowcase() {
           initial={{ opacity: 0, scale: 0.85, rotate: -25 }}
           animate={{ opacity: 0.16, scale: 1, rotate: 0 }}
           exit={{ opacity: 0, scale: 1.1, rotate: 20 }}
-          transition={{ duration: 1.4, ease: EASE_SILK }}
+          transition={{ duration: 0.7, ease: EASE_SILK }}
           className="pointer-events-none absolute -right-[18%] top-1/2 h-[46rem] w-[46rem] -translate-y-1/2"
           style={{ color: state.palette.accent }}
         >
@@ -46,7 +46,7 @@ export function StateShowcase() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.5 }}
           className="absolute inset-0"
         >
           <Particles kind={state.particle} />
@@ -82,10 +82,10 @@ export function StateShowcase() {
                     onFocus={() => setActiveState(s.id)}
                     onClick={() => setActiveState(s.id)}
                     data-cursor="hover"
-                    className="group flex w-full items-baseline gap-4 border-b border-ivory/10 py-4 text-left transition-colors duration-700"
+                    className="group flex w-full items-baseline gap-4 border-b border-ivory/10 py-4 text-left transition-colors duration-400"
                   >
                     <span
-                      className={`font-display text-2xl transition-all duration-700 ease-[cubic-bezier(0.43,0.13,0.23,0.96)] md:text-4xl ${
+                      className={`font-display text-2xl transition-all duration-400 ease-[cubic-bezier(0.43,0.13,0.23,0.96)] md:text-4xl ${
                         on
                           ? "translate-x-3 text-gold-gradient"
                           : "text-ivory/45 group-hover:translate-x-2 group-hover:text-ivory/80"
@@ -94,7 +94,7 @@ export function StateShowcase() {
                       {s.name}
                     </span>
                     <span
-                      className={`ml-auto font-sans text-[0.6rem] uppercase tracking-[0.2em] transition-opacity duration-700 ${
+                      className={`ml-auto font-sans text-[0.6rem] uppercase tracking-[0.2em] transition-opacity duration-400 ${
                         on ? "opacity-100 text-gold/80" : "opacity-40 text-ivory"
                       }`}
                     >
@@ -114,7 +114,7 @@ export function StateShowcase() {
               initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               exit={{ opacity: 0, y: -30, filter: "blur(10px)" }}
-              transition={{ duration: 0.95, ease: EASE_SILK }}
+              transition={{ duration: 0.45, ease: EASE_SILK }}
               className="glass-panel relative rounded-sm p-8 md:p-12 overflow-hidden group"
             >
               {state.image && (
