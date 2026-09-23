@@ -9,14 +9,14 @@ export function FlowingBand({ reverse = false, image }: { reverse?: boolean; ima
       <motion.div
         animate={{ x: reverse ? ["-50%", "0%"] : ["0%", "-50%"] }}
         transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        className="flex whitespace-nowrap w-max bg-charcoal/80 backdrop-blur-sm"
+        className="flex whitespace-nowrap w-max bg-charcoal/40 backdrop-blur-md"
       >
         {[...Array(20)].map((_, i) => (
           <img 
             key={i} 
             src={imgSrc} 
             alt="Decorative golden band" 
-            className="h-10 md:h-16 w-auto object-cover" 
+            className="h-10 md:h-16 w-auto object-cover brightness-150 contrast-125" 
           />
         ))}
       </motion.div>
